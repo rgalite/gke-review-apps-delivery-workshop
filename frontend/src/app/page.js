@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { getRestaurants } from '@/lib/strapi'
 
 export default async function Home() {
