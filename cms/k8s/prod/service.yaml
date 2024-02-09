@@ -7,9 +7,6 @@ spec:
     spec:
       containers:
       - image: cms
-        ports:
-          - name: http1
-            containerPort: 1337
       env:
       - name: APP_KEYS
         valueFrom:
