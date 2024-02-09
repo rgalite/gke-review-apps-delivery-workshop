@@ -5,6 +5,8 @@ steps:
     - build
     - '--interactive=false'
     - '--file-output=/workspace/artifacts.json'
+    - '--profile=prod'
+    - '--default-repo=europe-west1-docker.pkg.dev/mgalite-kering-cicdpipeline/cms'
 
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   entrypoint: gcloud
