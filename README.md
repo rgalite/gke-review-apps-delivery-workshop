@@ -7,7 +7,8 @@
 ```bash
 gcloud services enable \
     artifactregistry.googleapis.com \
-    clouddeploy.googleapis.com
+    clouddeploy.googleapis.com \
+    run.googleapis.com
 ```
 
 # Setup
