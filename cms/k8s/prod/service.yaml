@@ -10,3 +10,14 @@ spec:
         ports:
           - name: http1
             containerPort: 1337
+      env:
+      - name: APP_KEYS
+        valueFrom:
+          secretKeyRef:
+            key: latest
+            name: strapi-app-keys
+      - name: API_TOKEN_SALT
+        valueFrom:
+          secretKeyRef:
+            key: latest
+            name: strapi-api-token-salt
