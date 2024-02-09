@@ -1,0 +1,9 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cms-prod
+spec:
+  template:
+    spec:
+      containers:
+      - image: cms

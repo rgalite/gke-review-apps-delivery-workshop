@@ -1,0 +1,12 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+ name: frontend-delivery-pipeline
+serialPipeline:
+ stages:
+ - targetId: frontend-dev
+   profiles:
+   - prod
+ - targetId: frontend-prod
+   profiles:
+   - prod

@@ -1,0 +1,14 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: cms-prod
+run:
+  location: projects/mgalite-kering-cicdpipeline/locations/europe-west1
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: cms-dev
+run:
+  location: projects/mgalite-kering-cicdpipeline/locations/europe-west1
+

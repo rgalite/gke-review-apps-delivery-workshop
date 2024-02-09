@@ -1,0 +1,21 @@
+steps:
+- name: gcr.io/k8s-skaffold/skaffold
+  args:
+    - skaffold
+    - build
+    - '--interactive=false'
+    - '--file-output=/workspace/artifacts.json'
+
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  entrypoint: gcloud
+  args:
+    [
+      "deploy", "releases", "create", "rel-${SHORT_SHA}",
+      "--delivery-pipeline", "PIPELINE_NAME",
+      "--region", $_REGION,
+      "--annotations", "commitId=${REVISION_ID}",
+      "--build-artifacts", "/workspace/artifacts.json"
+    ]
+
+substitutions:
+  _REGION: europe-west1
