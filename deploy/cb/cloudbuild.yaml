@@ -4,21 +4,53 @@ steps:
     - skaffold
     - build
     - '--interactive=false'
-    - '--file-output=/workspace/artifacts.json'
+    - '--file-output=/workspace/cms-artifacts.json'
     - '--profile=prod'
     - '--default-repo=europe-west1-docker.pkg.dev/mgalite-kering-cicdpipeline/cms'
+  dir: cms
+  id: build-cms
+
+- name: gcr.io/k8s-skaffold/skaffold
+  args:
+    - skaffold
+    - build
+    - '--interactive=false'
+    - '--file-output=/workspace/frontend-artifacts.json'
+    - '--profile=prod'
+    - '--default-repo=europe-west1-docker.pkg.dev/mgalite-kering-cicdpipeline/cms'
+  waitFor: ['-']
+  dir: frontend
+  id: build-frontend
 
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   entrypoint: gcloud
   args:
     [
       "deploy", "releases", "create", "rel-${SHORT_SHA}",
-      "--delivery-pipeline", "$_PIPELINE_NAME",
+      "--delivery-pipeline", "$_FRONTEND_PIPELINE_NAME",
       "--region", $_REGION,
       "--annotations", "commitId=${REVISION_ID}",
-      "--build-artifacts", "/workspace/artifacts.json"
+      "--build-artifacts", "/workspace/frontend-artifacts.json"
     ]
+  waitFor:
+    - build-frontend
+  dir: frontend
+
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  entrypoint: gcloud
+  args:
+    [
+      "deploy", "releases", "create", "rel-${SHORT_SHA}",
+      "--delivery-pipeline", "$_CMS_PIPELINE_NAME",
+      "--region", $_REGION,
+      "--annotations", "commitId=${REVISION_ID}",
+      "--build-artifacts", "/workspace/cms-artifacts.json"
+    ]
+  waitFor:
+    - build-cms
+  dir: cms
 
 substitutions:
   _REGION: europe-west1
-  _PIPELINE_NAME: cms-multi-delivery-pipeline
+  _FRONTEND_PIPELINE_NAME: frontend-delivery-pipeline
+  _CMS_PIPELINE_NAME: cms-delivery-pipeline

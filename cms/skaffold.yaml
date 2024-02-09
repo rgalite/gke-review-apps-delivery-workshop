@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta8
 kind: Config
 metadata:
-  name: gke-review-apps-delivery-workshop
+  name: cms
 profiles:
   - name: dev
     activation:
@@ -9,31 +9,21 @@ profiles:
     manifests:
       kustomize:
         paths:
-          - cms/k8s/dev
-          - frontend/k8s/dev
+          - k8s/dev
     build:
       artifacts:
         - image: cms
-          context: cms
-          docker:
-            dockerfile: Dockerfile
-        - image: frontend
-          context: frontend
+          context: .
           docker:
             dockerfile: Dockerfile
   - name: prod
     manifests:
       kustomize:
         paths:
-          - cms/k8s/prod
-          - frontend/k8s/prod
+          - k8s/prod
     build:
       artifacts:
         - image: cms
-          context: cms
-          docker:
-            dockerfile: Dockerfile.prod
-        - image: frontend
-          context: frontend
+          context: .
           docker:
             dockerfile: Dockerfile.prod

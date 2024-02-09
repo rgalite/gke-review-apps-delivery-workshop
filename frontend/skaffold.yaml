@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: frontend
+profiles:
+  - name: dev
+    activation:
+      - kubeContext: minikube
+    manifests:
+      kustomize:
+        paths:
+          - k8s/dev
+    build:
+      artifacts:
+        - image: frontend
+          context: .
+          docker:
+            dockerfile: Dockerfile
+  - name: prod
+    manifests:
+      kustomize:
+        paths:
+          - k8s/prod
+    build:
+      artifacts:
+        - image: frontend
+          context: .
+          docker:
+            dockerfile: Dockerfile.prod
