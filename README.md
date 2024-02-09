@@ -32,6 +32,12 @@ gcloud deploy apply --file deploy/cd/frontend-target.yaml --region europe-west1
 gcloud deploy apply --file deploy/cd/cms-target.yaml --region europe-west1
 ```
 
+- Create Cloud Deploy cms mulit-targets for dev and prod
+
+```bash
+gcloud deploy apply --file deploy/cd/cms-multi-target.yaml --region europe-west1
+```
+
 - Create Cloud Deploy delivery pipeline for frontend
 
 ```bash
@@ -42,4 +48,10 @@ gcloud deploy apply --file deploy/cd/frontend-delivery-pipeline.yaml --region eu
 
 ```bash
 gcloud deploy apply --file deploy/cd/cms-delivery-pipeline.yaml --region europe-west1
+```
+
+- Create Cloud Deploy delivery pipeline for both apps
+
+```bash
+gcloud deploy apply --file deploy/cd/cms-multitarget-pipeline.yaml --region europe-west1
 ```

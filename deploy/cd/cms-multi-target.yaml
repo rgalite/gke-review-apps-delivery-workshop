@@ -1,0 +1,17 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: cms-multi-target-dev
+multiTarget:
+  targetIds:
+  - frontend-dev
+  - cms-dev
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+ name: cms-multi-target-prod
+multiTarget:
+  targetIds:
+  - frontend-prod
+  - cms-prod

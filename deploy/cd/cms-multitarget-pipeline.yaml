@@ -1,0 +1,12 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+ name: cms-multi-delivery-pipeline
+serialPipeline:
+ stages:
+ - targetId: cms-multi-target-dev
+   profiles:
+   - prod
+ - targetId: cms-multi-target-prod
+   profiles:
+   - prod

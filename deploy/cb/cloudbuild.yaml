@@ -19,4 +19,4 @@ steps:
 
 substitutions:
   _REGION: europe-west1
-  _PIPELINE_NAME: cms-delivery-pipeline
+  _PIPELINE_NAME: cms-multi-delivery-pipeline
