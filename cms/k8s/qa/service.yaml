@@ -7,14 +7,14 @@ spec:
     spec:
       containers:
       - image: cms
-      env:
-      - name: APP_KEYS
-        valueFrom:
-          secretKeyRef:
-            key: latest
-            name: strapi-app-keys
-      - name: API_TOKEN_SALT
-        valueFrom:
-          secretKeyRef:
-            key: latest
-            name: strapi-api-token-salt
+        env:
+        - name: APP_KEYS
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: strapi-app-keys
+        - name: API_TOKEN_SALT
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: strapi-api-token-salt
