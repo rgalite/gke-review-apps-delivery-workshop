@@ -6,7 +6,7 @@ serialPipeline:
  stages:
  - targetId: frontend-dev
    profiles:
-   - prod
+   - qa
  - targetId: frontend-prod
    profiles:
    - prod

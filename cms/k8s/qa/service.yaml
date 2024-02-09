@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: cms-dev
+  name: cms-qa
 spec:
   template:
     spec:

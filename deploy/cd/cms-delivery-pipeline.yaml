@@ -6,7 +6,7 @@ serialPipeline:
  stages:
  - targetId: cms-dev
    profiles:
-   - prod
+   - qa
  - targetId: cms-prod
    profiles:
    - prod

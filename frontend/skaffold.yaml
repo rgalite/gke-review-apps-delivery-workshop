@@ -18,6 +18,17 @@ profiles:
           context: .
           docker:
             dockerfile: Dockerfile
+  - name: qa
+    manifests:
+      kustomize:
+        paths:
+          - k8s/qa
+    build:
+      artifacts:
+        - image: cms
+          context: .
+          docker:
+            dockerfile: Dockerfile.prod
   - name: prod
     manifests:
       kustomize:
