@@ -7,3 +7,6 @@ spec:
     spec:
       containers:
       - image: cms
+        ports:
+          - name: http1
+            containerPort: 1337
