@@ -11,7 +11,7 @@ steps:
   args:
     [
       "deploy", "releases", "create", "rel-${SHORT_SHA}",
-      "--delivery-pipeline", "PIPELINE_NAME",
+      "--delivery-pipeline", "$_PIPELINE_NAME",
       "--region", $_REGION,
       "--annotations", "commitId=${REVISION_ID}",
       "--build-artifacts", "/workspace/artifacts.json"
@@ -19,3 +19,4 @@ steps:
 
 substitutions:
   _REGION: europe-west1
+  _PIPELINE_NAME: cms-delivery-pipeline
