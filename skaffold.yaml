@@ -3,6 +3,8 @@ kind: Config
 metadata:
   name: gke-review-apps-delivery-workshop
 build:
+  local:
+    concurrency: 0
   artifacts:
     - image: cms
       context: cms
