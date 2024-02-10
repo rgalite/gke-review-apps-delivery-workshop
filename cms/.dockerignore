@@ -1,1 +1,9 @@
 kubernetes-manifests
+node_modules
+.tmp/
+.cache/
+.git/
+build/
+node_modules/
+.env
+data/
