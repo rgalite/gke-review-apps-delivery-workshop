@@ -26,3 +26,13 @@ profiles:
     deploy:
       kubectl:
         defaultNamespace: go-eat
+        hooks:
+          after:
+            - container:
+                command:
+                  - psql
+                  - -c
+                  - SELECT 'CREATE DATABASE cms' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'cms')
+                  - -U
+                  - postgres
+                podName: postgres-*
