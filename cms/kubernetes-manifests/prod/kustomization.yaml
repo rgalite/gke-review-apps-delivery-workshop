@@ -4,3 +4,17 @@ kind: Kustomization
 resources:
 - ../base
 
+patches:
+- path: deployment.yaml
+  target:
+    kind: Deployment
+    name: cms
+- path: deployment.patch.yaml
+  target:
+    kind: Deployment
+    name: cms
+
+secretGenerator:
+- name: cms-creds
+  envs:
+  - .cms.env.secret

@@ -32,3 +32,28 @@ spec:
           value: 'postgres://postgres@postgres:5432/cms'
         - name: DATABASE_CLIENT
           value: postgres
+        - name: API_TOKEN_SALT
+          valueFrom:
+            secretKeyRef:
+              key: API_TOKEN_SALT
+              name: cms-creds
+        - name: APP_KEYS
+          valueFrom:
+            secretKeyRef:
+              key: APP_KEYS
+              name: cms-creds
+        - name: ADMIN_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: ADMIN_JWT_SECRET
+              name: cms-creds
+        - name: TRANSFER_TOKEN_SALT
+          valueFrom:
+            secretKeyRef:
+              key: TRANSFER_TOKEN_SALT
+              name: cms-creds
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: JWT_SECRET
+              name: cms-creds
