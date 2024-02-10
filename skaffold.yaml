@@ -36,3 +36,26 @@ profiles:
                   - -U
                   - postgres
                 podName: postgres-*
+  - name: prod
+    build:
+      artifacts:
+        - image: cms
+          context: cms
+          docker:
+            dockerfile: Dockerfile.prod
+        - image: frontend
+          context: frontend
+          docker:
+            dockerfile: Dockerfile.prod
+    manifests:
+      kustomize:
+        paths:
+          - cms/kubernetes-manifests/prod
+          - frontend/kubernetes-manifests/prod
+    deploy:
+      kubeContext: prod
+      kubectl:
+        defaultNamespace: go-eat
+  - name: cb
+    build:
+      googleCloudBuild: {}
