@@ -28,3 +28,5 @@ spec:
             value: "3000"
           - name: HOSTNAME
             value: "localhost"
+          - name: STRAPI_API_URL
+            value: http://cms/api

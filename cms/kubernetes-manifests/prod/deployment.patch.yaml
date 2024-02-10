@@ -1,0 +1,22 @@
+- op: add
+  path: "/spec/template/spec/containers/-"
+  value:
+    name: cloud-sql-proxy
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+    args:
+      - "--structured-logs"
+      - "--port=5432"
+      - "--auto-iam-authn"
+      - "mgalite-ts24-playground:europe-west1:cms-instance"
+    securityContext:
+      runAsNonRoot: true
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "2Gi"
+        cpu: "1"
+- op: replace
+  path: "/spec/template/spec/containers/0/env/2/value"
+  value: postgres://cms-workload%40mgalite-ts24-playground.iam:@localhost:5432/cms
