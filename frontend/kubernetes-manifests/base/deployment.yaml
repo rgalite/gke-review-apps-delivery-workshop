@@ -30,3 +30,8 @@ spec:
             value: "localhost"
           - name: STRAPI_API_URL
             value: http://cms:1337/api
+          - name: STRAPI_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: creds
+                key: STRAPI_API_TOKEN

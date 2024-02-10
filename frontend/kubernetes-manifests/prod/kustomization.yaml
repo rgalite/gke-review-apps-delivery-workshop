@@ -4,8 +4,7 @@ kind: Kustomization
 resources:
 - ../base
 
-patches:
-- path: deployment.patch.yaml
-  target:
-    kind: Deployment
-    name: frontend
+secretGenerator:
+- name: creds
+  envs:
+  - .env.secret
