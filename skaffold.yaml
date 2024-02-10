@@ -21,9 +21,5 @@ manifests:
       - frontend/kubernetes-manifests/dev
 profiles:
   - name: dev
-    manifests:
-      kustomize:
-        paths:
-          - cms/kubernetes-manifests/dev
     activation:
       - kubeContext: minikube
