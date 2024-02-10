@@ -23,3 +23,6 @@ profiles:
   - name: dev
     activation:
       - kubeContext: minikube
+    deploy:
+      kubectl:
+        defaultNamespace: go-eat
