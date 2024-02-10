@@ -1,0 +1,10 @@
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: STRAPI_API_URL
+    value: http://cms/api
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: STRAPI_API_TOKEN
+    value: baaae8effe5bef740a988e0a5aeeed4c171ac3089eeefb4e9ea5b2af74d92948cd18b367d7c406c2ac67202a6443b1837d006ca718667696ba42c671c4915de6296ea5101557158b89ff516b8a5343e79c633f23504e333928d436df7341dca25c05f40d879a16de898cd98d281ea65d681ba77d8b203dde531ddc818b00acdf

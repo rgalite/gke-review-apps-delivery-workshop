@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: frontend
 spec:
   selector:
     matchLabels:
@@ -16,13 +16,15 @@ spec:
         image: frontend
         resources:
           requests:
-            memory: "32Mi"
+            memory: "500Mi"
             cpu: "100m"
           limits:
-            memory: "128Mi"
+            memory: "1Gi"
             cpu: "500m"
         ports:
         - containerPort: 3000
         env:
           - name: PORT
             value: "3000"
+          - name: HOSTNAME
+            value: "localhost"
