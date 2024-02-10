@@ -3,4 +3,13 @@ kind: Kustomization
 
 resources:
 - ../base
+- pg-persistent-volume.yaml
+- pg-pv-claim.yaml
+- pg-deployment.yaml
+- pg-service.yaml
 
+patches:
+  - path: deployment.patch.yaml
+    target:
+      kind: Deployment
+      name: cms

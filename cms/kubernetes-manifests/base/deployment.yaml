@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-deployment
+  name: cms
 spec:
   selector:
     matchLabels:
@@ -16,15 +16,19 @@ spec:
         image: cms
         resources:
           requests:
-            memory: "32Mi"
-            cpu: "100m"
+            memory: "2Gi"
+            cpu: "1000m"
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "4Gi"
+            cpu: "2000m"
         ports:
-        - containerPort: 8080
+        - containerPort: 1337
         env:
         - name: PORT
-          value: '3000'
+          value: '1337'
         - name: HOSTNAME
           value: localhost
+        - name: DATABASE_URL
+          value: 'postgres://postgres@postgres:5432/cms'
+        - name: DATABASE_CLIENT
+          value: postgres
