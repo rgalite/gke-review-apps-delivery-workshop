@@ -25,7 +25,6 @@ profiles:
       - kubeContext: minikube
     deploy:
       kubectl:
-        defaultNamespace: go-eat
         hooks:
           after:
             - container:
@@ -54,8 +53,6 @@ profiles:
           - frontend/kubernetes-manifests/prod
     deploy:
       kubeContext: prod
-      kubectl:
-        defaultNamespace: go-eat
   - name: cb
     build:
       googleCloudBuild: {}
