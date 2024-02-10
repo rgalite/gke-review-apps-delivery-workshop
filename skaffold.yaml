@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: gke-review-apps-delivery-workshop
+build:
+  artifacts:
+    - image: cms
+      context: cms
+      docker:
+        dockerfile: Dockerfile
+    - image: frontend
+      context: frontend
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  kustomize:
+    paths:
+      - cms/kubernetes-manifests/dev
+      - frontend/kubernetes-manifests/dev
+profiles:
+  - name: dev
+    manifests:
+      kustomize:
+        paths:
+          - cms/kubernetes-manifests/dev
+    activation:
+      - kubeContext: minikube
