@@ -29,4 +29,4 @@ spec:
           - name: HOSTNAME
             value: "localhost"
           - name: STRAPI_API_URL
-            value: http://cms/api
+            value: http://cms:1337/api
