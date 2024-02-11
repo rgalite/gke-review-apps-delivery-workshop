@@ -1,1 +1,2 @@
-.cms.env.secret
+.env.secret
+.env.config

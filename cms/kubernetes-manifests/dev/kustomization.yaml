@@ -9,6 +9,6 @@ resources:
 - pg-service.yaml
 
 secretGenerator:
-- name: cms-creds
+- name: cms-secrets
   envs:
-  - .cms.env.secret
+  - .env.secret

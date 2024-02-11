@@ -36,24 +36,24 @@ spec:
           valueFrom:
             secretKeyRef:
               key: API_TOKEN_SALT
-              name: cms-creds
+              name: cms-secrets
         - name: APP_KEYS
           valueFrom:
             secretKeyRef:
               key: APP_KEYS
-              name: cms-creds
+              name: cms-secrets
         - name: ADMIN_JWT_SECRET
           valueFrom:
             secretKeyRef:
               key: ADMIN_JWT_SECRET
-              name: cms-creds
+              name: cms-secrets
         - name: TRANSFER_TOKEN_SALT
           valueFrom:
             secretKeyRef:
               key: TRANSFER_TOKEN_SALT
-              name: cms-creds
+              name: cms-secrets
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
               key: JWT_SECRET
-              name: cms-creds
+              name: cms-secrets

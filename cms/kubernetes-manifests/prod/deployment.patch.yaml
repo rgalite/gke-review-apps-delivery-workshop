@@ -7,7 +7,7 @@
       - "--structured-logs"
       - "--port=5432"
       - "--auto-iam-authn"
-      - "mgalite-ts24-playground:europe-west1:cms-instance"
+      - "INSTANCE_CONNECTION_NAME" # will be replaced by config.data.INSTANCE_CONNECTION_NAME
     securityContext:
       runAsNonRoot: true
     resources:
@@ -18,5 +18,10 @@
         memory: "2Gi"
         cpu: "1"
 - op: replace
+  path: "/spec/template/spec/containers/0/env/2/valueFrom"
+  value:
+    secretKeyRef:
+      key: DATABASE_URL
+      name: cms-secrets
+- op: remove
   path: "/spec/template/spec/containers/0/env/2/value"
-  value: postgres://cms-workload%40mgalite-ts24-playground.iam:@localhost:5432/cms
