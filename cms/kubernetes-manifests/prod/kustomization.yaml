@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - ../base
 - serviceaccount.yaml
+- httproute.yaml
 
 patches:
 - path: deployment.yaml
@@ -46,3 +47,13 @@ replacements:
           name: cms
         fieldPaths:
           - metadata.annotations.iam\.gke\.io/gcp-service-account
+  - source:
+      kind: ConfigMap
+      name: cms-config
+      fieldPath: data.HTTP_ROUTE_HOSTNAME
+    targets:
+      - select:
+          kind: HTTPRoute
+          name: frontend
+        fieldPaths:
+        - spec.hostnames.0
