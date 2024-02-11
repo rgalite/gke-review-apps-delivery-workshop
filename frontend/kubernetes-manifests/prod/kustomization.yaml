@@ -3,8 +3,26 @@ kind: Kustomization
 
 resources:
 - ../base
+- httproute.yaml
 
 secretGenerator:
 - name: creds
   envs:
   - .env.secret
+
+configMapGenerator:
+  - name: config
+    envs:
+    - .env.config
+
+replacements:
+- source:
+    kind: ConfigMap
+    name: config
+    fieldPath: data.HTTP_ROUTE_HOSTNAME
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: frontend
+      fieldPaths:
+      - spec.hostnames.0
