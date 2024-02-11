@@ -14,15 +14,13 @@ build:
       context: frontend
       docker:
         dockerfile: Dockerfile
-manifests:
-  kustomize:
-    paths:
-      - cms/kubernetes-manifests/dev
-      - frontend/kubernetes-manifests/dev
 profiles:
   - name: dev
-    activation:
-      - kubeContext: minikube
+    manifests:
+      kustomize:
+        paths:
+          - cms/kubernetes-manifests/dev
+          - frontend/kubernetes-manifests/dev
     deploy:
       kubectl:
         hooks:
@@ -35,6 +33,7 @@ profiles:
                   - -U
                   - postgres
                 podName: postgres-*
+      kubeContext: minikube
   - name: prod
     build:
       artifacts:
