@@ -34,6 +34,8 @@ profiles:
                   - postgres
                 podName: postgres-*
       kubeContext: minikube
+    activation:
+      - command: dev
   - name: prod
     build:
       artifacts:
