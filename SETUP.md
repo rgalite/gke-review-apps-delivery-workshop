@@ -80,7 +80,7 @@ gcloud sql databases create cms --instance=$INSTANCE_NAME
 ## Give access to the Cloud SQL instance to future workloads
 
 ```bash
-export CMS_WORKLOAD_SA=cms-workload
+export CMS_WORKLOAD_SA=cms-sa
 ```
 
 Create a service account for the cms workload
