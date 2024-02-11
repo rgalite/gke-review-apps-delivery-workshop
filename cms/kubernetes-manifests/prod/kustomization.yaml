@@ -54,6 +54,6 @@ replacements:
     targets:
       - select:
           kind: HTTPRoute
-          name: frontend
+          name: cms
         fieldPaths:
         - spec.hostnames.0
