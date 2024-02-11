@@ -46,13 +46,13 @@ profiles:
           context: frontend
           docker:
             dockerfile: Dockerfile.prod
+      local:
+        push: true
     manifests:
       kustomize:
         paths:
           - cms/kubernetes-manifests/prod
           - frontend/kubernetes-manifests/prod
-    deploy:
-      kubeContext: prod
   - name: cb
     build:
       googleCloudBuild: {}
