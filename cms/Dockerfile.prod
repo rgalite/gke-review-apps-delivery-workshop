@@ -10,6 +10,11 @@ RUN yarn config set network-timeout 600000 -g && yarn install --production
 ENV PATH /opt/node_modules/.bin:$PATH
 WORKDIR /opt/app
 COPY . .
+
+ARG BASE_URL=''
+ENV BASE_URL=${BASE_URL}
+ENV BASE_URL=/cms
+
 RUN yarn build
 
 # Creating final production image
