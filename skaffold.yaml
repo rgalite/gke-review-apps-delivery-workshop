@@ -57,7 +57,7 @@ profiles:
           - cms/kubernetes-manifests/prod
           - frontend/kubernetes-manifests/prod
     deploy:
-      statusCheckDeadlineSeconds: 60
+      statusCheckDeadlineSeconds: 120
   - name: cb
     build:
       googleCloudBuild: {}
