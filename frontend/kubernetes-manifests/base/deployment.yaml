@@ -27,7 +27,7 @@ spec:
           - name: PORT
             value: "3000"
           - name: HOSTNAME
-            value: "localhost"
+            value: "0.0.0.0"
           - name: STRAPI_API_URL
             value: http://cms:1337/api
           - name: STRAPI_API_TOKEN
