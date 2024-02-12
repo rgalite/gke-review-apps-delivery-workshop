@@ -26,3 +26,12 @@ spec:
           path:
             type: ReplacePrefixMatch
             replacePrefixMatch: /
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: cms
+      port: 1337
+    matches:
+    - path:
+        type: PathPrefix
+        value: /admin
