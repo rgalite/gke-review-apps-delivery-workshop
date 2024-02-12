@@ -5,6 +5,9 @@ resources:
 - ../base
 - httproute.yaml
 
+patches:
+  - path: deployment.yaml
+
 secretGenerator:
 - name: creds
   envs:
