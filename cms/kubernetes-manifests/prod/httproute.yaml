@@ -20,3 +20,9 @@ spec:
     - path:
         type: PathPrefix
         value: /cms
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /
