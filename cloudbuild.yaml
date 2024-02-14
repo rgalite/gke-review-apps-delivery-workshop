@@ -29,9 +29,9 @@ steps:
     STRAPI_API_TOKEN=STRAPI_API_TOKEN
     EOF
 
-    cat << EOF > /workspace/qa.env.config
+    cat << EOF > /workspace/cms.qa.env.config
     PROJECT_ID=$PROJECT_ID
-    INSTANCE_NAME=$_INSTANCE_NAME
+    INSTANCE_NAME=$INSTANCE_NAME
     GCP_SERVICE_ACCOUNT=projects/$PROJECT_ID/serviceAccounts/$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
     WORKLOAD_IDENTITY_SERVICE_ACCOUNT=$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]
     DATABASE_NAME=cms-$SKAFFOLD_NAMESPACE
@@ -42,6 +42,7 @@ steps:
   - CMS_SERVICE_ACCT=$_CMS_SERVICE_ACCT
   - REGION=$_REGION
   - INSTANCE_NAME=$_INSTANCE_NAME
+  - PROJECT_ID=$PROJECT_ID
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
@@ -57,10 +58,11 @@ steps:
   script: |
     #!/usr/bin/env bash
     kubectl create ns $SKAFFOLD_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
-    kubectl annotate ns $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID
+    kubectl annotate ns $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID --overwrite
     kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true' --overwrite
   env:
   - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
+  - PROJECT_ID=$PROJECT_ID
 
 - name: gcr.io/k8s-skaffold/skaffold
   script: |
