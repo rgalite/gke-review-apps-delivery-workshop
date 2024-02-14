@@ -36,6 +36,13 @@ profiles:
       kubeContext: minikube
     activation:
       - command: dev
+  - name: qa
+    manifests:
+      kustomize:
+        paths:
+          - frontend/kubernetes-manifests/prod
+          - cms/kubernetes-manifests/prod
+          - cms/kubernetes-manifests/qa
   - name: prod
     build:
       artifacts:

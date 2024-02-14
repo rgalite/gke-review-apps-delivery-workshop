@@ -1,0 +1,13 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPartialPolicy
+metadata:
+  name: workloadidentity-cms-sa
+spec:
+  resourceRef:
+    kind: IAMServiceAccount
+    external: iampolicy-dep-workloadidentity@${PROJECT_ID?}.iam.gserviceaccount.com
+  bindings:
+    - role: roles/iam.workloadIdentityUser
+      members:
+        - member: serviceAccount:${PROJECT_ID?}.svc.id.goog[default/iampolicy-dep-workloadidentity]
+

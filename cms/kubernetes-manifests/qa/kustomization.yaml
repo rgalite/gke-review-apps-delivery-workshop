@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- sqldatabase.yaml
+- workloadidentity.yaml
+
+configMapGenerator:
+  - name: cms-resources-config
+    envs:
+    - .env.config
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: cms-resources-config
+      fieldPath: data.INSTANCE_NAME
+    targets:
+      - select:
+          kind: SQLDatabase
+          name: sqldatabase
+        fieldPaths:
+        - spec.instanceRef.external
+  - source:
+      kind: ConfigMap
+      name: cms-resources-config
+      fieldPath: data.GCP_SERVICE_ACCOUNT
+    targets:
+      - select:
+          kind: IAMPartialPolicy
+          name: workloadidentity-cms-sa
+        fieldPaths:
+        - spec.resourceRef.external
+  - source:
+      kind: ConfigMap
+      name: cms-resources-config
+      fieldPath: data.WORKLOAD_IDENTITY_SERVICE_ACCOUNT
+    targets:
+      - select:
+          kind: IAMPartialPolicy
+          name: workloadidentity-cms-sa
+        fieldPaths:
+        - spec.bindings.0.members.0.member
+        options:
+          delimiter: ':'
+          index: 1
+  - source:
+      kind: ConfigMap
+      name: cms-resources-config
+      fieldPath: data.DATABASE_NAME
+    targets:
+      - select:
+          kind: SQLDatabase
+          name: sqldatabase
