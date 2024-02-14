@@ -1,5 +1,48 @@
 steps:
-  # generate step to connect to a cluster
+
+# generate a step to run a sh command
+
+- name: 'ubuntu'
+  script: |
+    #!/usr/bin/env bash
+    cat << EOF > /workspace/cms.prod.env.config
+    PROJECT_ID=$PROJECT_ID
+    INSTANCE_CONNECTION_NAME=$PROJECT_ID:$REGION:$INSTANCE_NAME
+    GCP_SERVICE_ACCOUNT=$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
+    HTTP_ROUTE_HOSTNAME=$SKAFFOLD_NAMESPACE.$DOMAIN_NAME
+    EOF
+
+    cat << EOF > /workspace/cms.prod.env.secret
+    APP_KEYS="$(echo -n "APP_KEYS$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)"
+    API_TOKEN_SALT=$(echo -n "API_TOKEN_SALT$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
+    ADMIN_JWT_SECRET=$(echo -n "ADMIN_JWT_SECRET$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
+    TRANSFER_TOKEN_SALT=$(echo -n "TRANSFER_TOKEN_SALT$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
+    JWT_SECRET=$(echo -n "JWT_SECRET$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
+    DATABASE_URL=postgres://$CMS_SERVICE_ACCT%40$PROJECT_ID.iam:@localhost:5432/cms-$SKAFFOLD_NAMESPACE
+    EOF
+
+    cat << EOF > /workspace/frontend.env.config
+    HTTP_ROUTE_HOSTNAME=$SKAFFOLD_NAMESPACE.$DOMAIN_NAME
+    EOF
+
+    cat << EOF > /workspace/frontend.env.secret
+    STRAPI_API_TOKEN=STRAPI_API_TOKEN
+    EOF
+
+    cat << EOF > /workspace/qa.env.config
+    PROJECT_ID=$PROJECT_ID
+    INSTANCE_NAME=$_INSTANCE_NAME
+    GCP_SERVICE_ACCOUNT=projects/$PROJECT_ID/serviceAccounts/$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
+    WORKLOAD_IDENTITY_SERVICE_ACCOUNT=$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]
+    DATABASE_NAME=cms-$SKAFFOLD_NAMESPACE
+    EOF
+  env:
+  - DOMAIN_NAME=$_DOMAIN_NAME
+  - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
+  - CMS_SERVICE_ACCT=$_CMS_SERVICE_ACCT
+  - REGION=$_REGION
+  - INSTANCE_NAME=$_INSTANCE_NAME
+
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
     - gcloud
@@ -11,19 +54,32 @@ steps:
     - ${_REGION}
 
 - name: gcr.io/cloud-builders/kubectl
-  entrypoint: bash
-  args:
-    - -c
-    - "kubectl create ns $_SKAFFOLD_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -"
+  script: |
+    #!/usr/bin/env bash
+    kubectl create ns $SKAFFOLD_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+    kubectl annotate ns $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID
+    kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true' --overwrite
+  env:
+  - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
 
-- name: gcr.io/cloud-builders/kubectl
-  entrypoint: bash
-  args:
-    - -c
-    - "kubectl annotate ns $_SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID"
+- name: gcr.io/k8s-skaffold/skaffold
+  script: |
+    #!/usr/bin/env bash
+    cp /workspace/cms.prod.env.config cms/kubernetes-manifests/prod/.env.config
+    cp /workspace/cms.prod.env.secret cms/kubernetes-manifests/prod/.env.secret
+    cp /workspace/cms.qa.env.config cms/kubernetes-manifests/qa/.env.config
+    cp /workspace/frontend.env.config frontend/kubernetes-manifests/prod/.env.config
+    cp /workspace/frontend.env.secret frontend/kubernetes-manifests/prod/.env.secret
+    skaffold run --profile prod,qa --status-check=false --build-concurrency=0
+  env:
+  - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
+  - SKAFFOLD_DEFAULT_REPO=$_SKAFFOLD_DEFAULT_REPO
 
 substitutions:
   _SKAFFOLD_NAMESPACE: staging
   _REGION: europe-west1
-  _CLUSTER_NAME: foo
+  _CLUSTER_NAME: review-apps
+  _CMS_SERVICE_ACCT: cms-sa
+  _DOMAIN_NAME: microserve.dev
+  _SKAFFOLD_DEFAULT_REPO: europe-west1-docker.pkg.dev/mgalite-ts24-playground/go-eat
 
