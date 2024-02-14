@@ -1,0 +1,29 @@
+steps:
+  # generate step to connect to a cluster
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+    - gcloud
+    - container
+    - clusters
+    - get-credentials
+    - ${_CLUSTER_NAME}
+    - --region
+    - ${_REGION}
+
+- name: gcr.io/cloud-builders/kubectl
+  entrypoint: bash
+  args:
+    - -c
+    - "kubectl create ns $_SKAFFOLD_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -"
+
+- name: gcr.io/cloud-builders/kubectl
+  entrypoint: bash
+  args:
+    - -c
+    - "kubectl annotate ns $_SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID"
+
+substitutions:
+  _SKAFFOLD_NAMESPACE: staging
+  _REGION: europe-west1
+  _CLUSTER_NAME: foo
+
