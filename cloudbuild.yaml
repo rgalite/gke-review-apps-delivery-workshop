@@ -1,7 +1,5 @@
 steps:
 
-# generate a step to run a sh command
-
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
