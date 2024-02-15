@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+const restaurants = require('./_seed/restaurants.json')
 
 module.exports = {
   /**
@@ -16,5 +17,50 @@ module.exports = {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/*{ strapi }*/) {},
-};
+  async bootstrap({ strapi }) {
+    await Promise.all(
+      restaurants.map(async (restaurant) => {
+        const entries = await strapi.entityService.findMany(
+          'api::restaurant.restaurant',
+          {
+            filters: {
+              name: restaurant.name,
+            },
+            fields: ['id'],
+            limit: 1,
+          }
+        )
+
+        if (entries.length === 0) {
+          return strapi.entityService.create('api::restaurant.restaurant', {
+            data: {
+              name: restaurant.name,
+              address: restaurant.address,
+              rankingPosition: restaurant.rankingPosition,
+              rating: restaurant.rating,
+              numberOfReviews: restaurant.numberOfReviews,
+            },
+            fields: ['id'],
+          })
+        }
+
+        const foundRestaurant = entries[0]
+
+        return strapi.entityService.update(
+          'api::restaurant.restaurant',
+          foundRestaurant.id,
+          {
+            data: {
+              name: restaurant.name,
+              address: restaurant.address,
+              rankingPosition: restaurant.rankingPosition,
+              rating: restaurant.rating,
+              numberOfReviews: restaurant.numberOfReviews,
+            },
+            fields: ['id'],
+          }
+        )
+      })
+    )
+  },
+}
