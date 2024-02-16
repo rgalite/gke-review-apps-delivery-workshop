@@ -20,7 +20,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: cms-config
-      fieldPath: data.GCP_SERVICE_ACCOUNT
+      fieldPath: data.WORKLOAD_IDENTITY_GCP_SERVICE_ACCOUNT
     targets:
       - select:
           kind: IAMPartialPolicy
