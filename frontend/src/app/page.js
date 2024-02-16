@@ -1,16 +1,23 @@
 export const dynamic = 'force-dynamic'
 import { getRestaurants } from '@/lib/strapi'
+import RestaurantsList from './components/restaurants-list/list'
 
 export default async function Home() {
   let restaurants = []
 
   try {
-    restaurants = await getRestaurants()
+    const restaurantsData = await getRestaurants({ sort: 'rankingPosition' })
+    restaurants = restaurantsData.data || []
   } catch (error) {
     console.error(error)
+    restaurants = []
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <main className="p-8">
+      <div className="container mx-auto">
+        <RestaurantsList restaurants={restaurants} />
+      </div>
+    </main>
   )
 }
