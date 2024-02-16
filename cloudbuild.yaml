@@ -8,6 +8,10 @@ steps:
     INSTANCE_CONNECTION_NAME=$PROJECT_ID:$REGION:$INSTANCE_NAME
     GCP_SERVICE_ACCOUNT=$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
     HTTP_ROUTE_HOSTNAME=$SKAFFOLD_NAMESPACE.$DOMAIN_NAME
+    INSTANCE_NAME=$INSTANCE_NAME
+    GCP_SERVICE_ACCOUNT=projects/$PROJECT_ID/serviceAccounts/$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
+    WORKLOAD_IDENTITY_SERVICE_ACCOUNT=$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]
+    DATABASE_NAME=cms-$SKAFFOLD_NAMESPACE
     EOF
 
     cat << EOF > /workspace/cms.prod.env.secret
@@ -25,14 +29,6 @@ steps:
 
     cat << EOF > /workspace/frontend.env.secret
     STRAPI_API_TOKEN=STRAPI_API_TOKEN
-    EOF
-
-    cat << EOF > /workspace/cms.qa.env.config
-    PROJECT_ID=$PROJECT_ID
-    INSTANCE_NAME=$INSTANCE_NAME
-    GCP_SERVICE_ACCOUNT=projects/$PROJECT_ID/serviceAccounts/$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
-    WORKLOAD_IDENTITY_SERVICE_ACCOUNT=$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]
-    DATABASE_NAME=cms-$SKAFFOLD_NAMESPACE
     EOF
   env:
   - DOMAIN_NAME=$_DOMAIN_NAME
@@ -65,9 +61,8 @@ steps:
 - name: gcr.io/k8s-skaffold/skaffold
   script: |
     #!/usr/bin/env bash
-    cp /workspace/cms.prod.env.config cms/kubernetes-manifests/prod/.env.config
-    cp /workspace/cms.prod.env.secret cms/kubernetes-manifests/prod/.env.secret
-    cp /workspace/cms.qa.env.config cms/kubernetes-manifests/qa/.env.config
+    cp /workspace/cms.prod.env.config cms/kubernetes-manifests/config/.env.config
+    cp /workspace/cms.prod.env.secret cms/kubernetes-manifests/config/.env.secret
     cp /workspace/frontend.env.config frontend/kubernetes-manifests/prod/.env.config
     cp /workspace/frontend.env.secret frontend/kubernetes-manifests/prod/.env.secret
     skaffold run --profile prod,qa --status-check=false --build-concurrency=0
