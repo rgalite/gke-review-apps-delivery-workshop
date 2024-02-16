@@ -52,7 +52,8 @@ steps:
 - name: gcr.io/cloud-builders/kubectl
   script: |
     #!/usr/bin/env bash
-    kubectl delete ns $SKAFFOLD_NAMESPACE --ignore-not-found=true --timeout=10m --wait
+    kubectl delete ns $SKAFFOLD_NAMESPACE --ignore-not-found=true --wait=false &
+    kubectl wait namespace/$SKAFFOLD_NAMESPACE --for=delete --timeout=-1s
     kubectl create ns $SKAFFOLD_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
     kubectl annotate ns $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID --overwrite
     kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true' --overwrite
