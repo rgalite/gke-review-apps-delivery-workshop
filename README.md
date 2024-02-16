@@ -511,10 +511,10 @@ For deployment, we’ll use Skaffold.
 
 Skaffold aids in continuous development for Kubernetes applications by streamlining the build, test, and deployment processes. Integrating Skaffold into a CI/CD pipeline offers benefits such as continuous delivery, faster feedback, reduced manual intervention, and enhanced consistency and reliability. This automation empowers developers to deliver high-quality software efficiently and maintain a robust Kubernetes application development process.
 
-3. Create a file `cms/kubernetes-manifests/prod/.env.config`
+3. Create a file `cms/kubernetes-manifests/config/.env.config`
 
 ```bash
-cat << EOF > cms/kubernetes-manifests/prod/.env.config
+cat << EOF > cms/kubernetes-manifests/config/.env.config
 PROJECT_ID=$PROJECT_ID
 INSTANCE_CONNECTION_NAME=$PROJECT_ID:$REGION:$INSTANCE_NAME
 GCP_SERVICE_ACCOUNT=$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
@@ -522,10 +522,10 @@ HTTP_ROUTE_HOSTNAME=staging.$DOMAIN_NAME
 EOF
 ```
 
-4. Create a file `cms/kubernetes-manifests/prod/.env.secret`
+4. Create a file `cms/kubernetes-manifests/config/.env.secret`
 
 ```bash
-cat << EOF > cms/kubernetes-manifests/prod/.env.secret
+cat << EOF > cms/kubernetes-manifests/config/.env.secret
 APP_KEYS="$(echo -n "APP_KEYSstaging" | md5sum | cut -d ' ' -f 1)"
 API_TOKEN_SALT=$(echo -n "API_TOKEN_SALTstaging" | md5sum | cut -d ' ' -f 1)
 ADMIN_JWT_SECRET=$(echo -n "ADMIN_JWT_SECRETstaging" | md5sum | cut -d ' ' -f 1)
