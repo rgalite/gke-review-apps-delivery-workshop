@@ -1,5 +1,4 @@
 steps:
-
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
@@ -47,6 +46,8 @@ steps:
     - ${_CLUSTER_NAME}
     - --region
     - ${_REGION}
+  id: get-cluster-credentials
+  waitFor: ['-']
 
 - name: gcr.io/cloud-builders/kubectl
   script: |
@@ -58,6 +59,19 @@ steps:
   env:
   - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
   - PROJECT_ID=$PROJECT_ID
+  id: create-namespace
+  waitFor:
+  - get-cluster-credentials
+
+- name: gcr.io/k8s-skaffold/skaffold
+  script: |
+    #!/usr/bin/env bash
+    skaffold build --file-output=tags.json --profile=qa --build-concurrency=0
+  env:
+  - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
+  - SKAFFOLD_DEFAULT_REPO=$_SKAFFOLD_DEFAULT_REPO
+  id: create-artifacts
+  waitFor: ['-']
 
 - name: gcr.io/k8s-skaffold/skaffold
   script: |
@@ -66,10 +80,13 @@ steps:
     cp /workspace/cms.prod.env.secret cms/kubernetes-manifests/config/.env.secret
     cp /workspace/frontend.env.config frontend/kubernetes-manifests/prod/.env.config
     cp /workspace/frontend.env.secret frontend/kubernetes-manifests/prod/.env.secret
-    skaffold run --profile qa --status-check=false --build-concurrency=0
+    skaffold deploy --build-artifacts=tags.json --profile=qa --status-check=false
   env:
   - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
   - SKAFFOLD_DEFAULT_REPO=$_SKAFFOLD_DEFAULT_REPO
+  waitFor:
+  - create-namespace
+  - create-artifacts
 
 substitutions:
   _SKAFFOLD_NAMESPACE: staging
