@@ -18,6 +18,22 @@ build:
         dockerfile: Dockerfile
       sync:
         infer: ["frontend/**/*"]
+portForward:
+  - resourceType: service
+    resourceName: postgres
+    port: 5432
+    localPort: 5432
+    address: 0.0.0.0
+  - resourceType: service
+    resourceName: cms
+    port: 1337
+    localPort: 1337
+    address: 0.0.0.0
+  - resourceType: service
+    resourceName: frontend
+    port: 3000
+    address: 0.0.0.0
+    localPort: 3000
 profiles:
   - name: dev
     manifests:
