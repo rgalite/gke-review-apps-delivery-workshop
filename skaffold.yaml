@@ -10,10 +10,14 @@ build:
       context: cms
       docker:
         dockerfile: Dockerfile
+      sync:
+        infer: ["cms/**/*"]
     - image: frontend
       context: frontend
       docker:
         dockerfile: Dockerfile
+      sync:
+        infer: ["frontend/**/*"]
 profiles:
   - name: dev
     manifests:
