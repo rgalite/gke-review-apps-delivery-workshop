@@ -65,6 +65,7 @@ steps:
     cp /workspace/cms.prod.env.secret cms/kubernetes-manifests/config/.env.secret
     cp /workspace/frontend.env.config frontend/kubernetes-manifests/prod/.env.config
     cp /workspace/frontend.env.secret frontend/kubernetes-manifests/prod/.env.secret
+    kubectl delete sqldatabases cms-$SKAFFOLD_NAMESPACE --ignore-not-found=true -n $SKAFFOLD_NAMESPACE
     skaffold run --profile prod,qa --status-check=false --build-concurrency=0
   env:
   - SKAFFOLD_NAMESPACE=$_SKAFFOLD_NAMESPACE
