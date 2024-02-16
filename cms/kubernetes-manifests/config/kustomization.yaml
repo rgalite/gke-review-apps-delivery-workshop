@@ -1,0 +1,9 @@
+secretGenerator:
+- name: cms-secrets
+  envs:
+  - .env.secret
+
+configMapGenerator:
+  - name: cms-config
+    envs:
+    - .env.config

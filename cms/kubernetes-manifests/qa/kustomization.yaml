@@ -2,18 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+- ../prod
 - sqldatabase.yaml
 - workloadidentity.yaml
-
-configMapGenerator:
-  - name: cms-resources-config
-    envs:
-    - .env.config
 
 replacements:
   - source:
       kind: ConfigMap
-      name: cms-resources-config
+      name: cms-config
       fieldPath: data.INSTANCE_NAME
     targets:
       - select:
@@ -23,7 +19,7 @@ replacements:
         - spec.instanceRef.external
   - source:
       kind: ConfigMap
-      name: cms-resources-config
+      name: cms-config
       fieldPath: data.GCP_SERVICE_ACCOUNT
     targets:
       - select:
@@ -33,7 +29,7 @@ replacements:
         - spec.resourceRef.external
   - source:
       kind: ConfigMap
-      name: cms-resources-config
+      name: cms-config
       fieldPath: data.WORKLOAD_IDENTITY_SERVICE_ACCOUNT
     targets:
       - select:
@@ -46,7 +42,7 @@ replacements:
           index: 1
   - source:
       kind: ConfigMap
-      name: cms-resources-config
+      name: cms-config
       fieldPath: data.DATABASE_NAME
     targets:
       - select:
