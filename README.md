@@ -712,22 +712,26 @@ cms-review-app-1   18m   True    UpToDate   18m
 # Cleanup
 
 Remove the test application.
+
 ```bash
 kubectl delete ns infra-resources test-gateway
 ```
 
 Remove the gateway.
+
 ```bash
 kubectl delete gateway external-http -n infra-resources
 ```
 
 Remove the maps entries
+
 ```bash
 gcloud certificate-manager maps entries delete $CERTIFICATE_MAP_ENTRY   --map=$CERTIFICATE_MAP
 gcloud certificate-manager maps entries delete $CERTIFICATE_MAP_ENTRY   --map=$CERTIFICATE_MAP
 ```
 
 Remove the certificate map
+
 ```bash
 gcloud certificate-manager certificates delete $CERTIFICATE_NAME
 ```
