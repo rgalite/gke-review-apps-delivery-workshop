@@ -56,13 +56,6 @@ profiles:
       kubeContext: minikube
     activation:
       - command: dev
-  - name: qa
-    manifests:
-      kustomize:
-        paths:
-          - frontend/kubernetes-manifests/prod
-          - cms/kubernetes-manifests/prod
-          - cms/kubernetes-manifests/qa
   - name: prod
     build:
       artifacts:
@@ -84,7 +77,29 @@ profiles:
           - cms/kubernetes-manifests/prod
           - frontend/kubernetes-manifests/prod
     deploy:
-      statusCheckDeadlineSeconds: 120
+      statusCheckDeadlineSeconds: 180
+  - name: qa
+    build:
+      artifacts:
+        - image: cms
+          context: cms
+          docker:
+            dockerfile: Dockerfile.prod
+            buildArgs:
+              BASE_URL: /cms
+        - image: frontend
+          context: frontend
+          docker:
+            dockerfile: Dockerfile.prod
+      local:
+        push: true
+    manifests:
+      kustomize:
+        paths:
+          - frontend/kubernetes-manifests/prod
+          - cms/kubernetes-manifests/qa
+    deploy:
+      statusCheckDeadlineSeconds: 180
   - name: cb
     build:
       googleCloudBuild: {}
