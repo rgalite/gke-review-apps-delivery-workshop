@@ -18,6 +18,7 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }) {
+    const now = new Date()
     await Promise.all(
       restaurants.map(async (restaurant) => {
         const entries = await strapi.entityService.findMany(
@@ -39,6 +40,7 @@ module.exports = {
               rankingPosition: restaurant.rankingPosition,
               rating: restaurant.rating,
               numberOfReviews: restaurant.numberOfReviews,
+              publishedAt: now,
             },
             fields: ['id'],
           })
@@ -56,6 +58,7 @@ module.exports = {
               rankingPosition: restaurant.rankingPosition,
               rating: restaurant.rating,
               numberOfReviews: restaurant.numberOfReviews,
+              publishedAt: now,
             },
             fields: ['id'],
           }
