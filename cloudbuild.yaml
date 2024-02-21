@@ -96,6 +96,7 @@ substitutions:
   _CMS_SERVICE_ACCT: cms-sa
   _DOMAIN_NAME: microserve.dev
   _SKAFFOLD_DEFAULT_REPO: europe-west1-docker.pkg.dev/mgalite-ts24-playground/go-eat
+  _INSTANCE_NAME: cms-instance
 
 options:
   machineType: 'E2_HIGHCPU_8'
