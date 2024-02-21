@@ -4,7 +4,7 @@ This repository is a playground to play with different technologies on GCP.
 
 ## Labs
 
-  * [Lab 1 - Review Apps](/rgalite/gke-review-apps-delivery-workshop/tree/labs/review-apps)
+  * [Lab 1 - Review Apps](../../tree/labs/review-apps)
   
     Review apps are short-lived application environments that enable developers, designers, QA personnel, product managers, and other reviewers to assess and interact with code modifications as part of the code review process. These environments are built using the branch's code, providing a tangible and interactive platform for reviewing proposed changes.
     
