@@ -2,64 +2,10 @@
 
 This repository is a playground to play with different technologies on GCP.
 
-## Setup
+## Labs
 
-Open the `SETUP.md` file to create the necessary Cloud resources.
-
-```bash
-export CLUSTER_NAME=review-apps
-export PROJECT_ID=mgalite-ts24-playground
-export REPO=europe-west1-docker.pkg.dev/$PROJECT_ID/go-eat
-export PROJECT_NUMBER=45621755473
-export REPOSITORY_NAME=go-eat
-```
-
-## Get GKE Kube API credentials
-
-```bash
-gcloud container clusters get-credentials $CLUSTER_NAME --region europe-west1 --project $PROJECT_ID
-```
-
-```bash
-kubectl config rename-context $(kubectl config current-context) prod
-```
-
-## Deep Dive
-
-### Prerequisites Kubernetes resources
-
-Create the namespace.
-
-```bash
-kubectl create namespace prod
-```
-
-### Skaffold
-
-Build the image and push it to Artifact Registry.
-
-```bash
-skaffold build --profile prod,cb --default-repo=$REPO --file-output=artifacts.json
-```
-
-Render the manifests.
-
-```bash
-skaffold render --profile prod --output render.yaml
-```
-
-Apply the manifests.
-
-```bash
-skaffold apply --profile=prod --namespace=prod render.yaml
-```
-
-### Artifact Registry
-
-```bash
-gcloud artifacts repositories create go-eat --repository-format=docker --location=europe-west1
-```
-
-### Workload Identity
-
-### Gateway API
+  * [Lab 1 - Review Apps](/rgalite/gke-review-apps-delivery-workshop/tree/labs/review-apps)
+  
+    Review apps are short-lived application environments that enable developers, designers, QA personnel, product managers, and other reviewers to assess and interact with code modifications as part of the code review process. These environments are built using the branch's code, providing a tangible and interactive platform for reviewing proposed changes.
+    
+    Through this workshop, we will guide you through the journey of establishing a platform that leverages GKE for the creation of disposable environments. We will incorporate ingresses using the Kubernetes Gateway API to direct traffic towards the short-lived applications. Lastly, we will utilize Config Connector to effortlessly construct the infrastructure dynamically.
