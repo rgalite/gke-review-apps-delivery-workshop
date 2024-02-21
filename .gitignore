@@ -1,4 +1,4 @@
 .vscode
 render.yaml
 artifacts.json
-env.sh
+env.*.sh
