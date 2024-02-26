@@ -98,8 +98,6 @@ profiles:
         paths:
           - frontend/kubernetes-manifests/prod
           - cms/kubernetes-manifests/qa
-    deploy:
-      statusCheckDeadlineSeconds: 180
   - name: cb
     build:
       googleCloudBuild: {}
