@@ -57,3 +57,9 @@ spec:
             secretKeyRef:
               key: JWT_SECRET
               name: cms-secrets
+        readinessProbe:
+          httpGet:
+            path: /_health
+            port: 1337
+          initialDelaySeconds: 30
+          periodSeconds: 3
