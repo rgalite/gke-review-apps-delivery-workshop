@@ -5,6 +5,7 @@ metadata:
 build:
   local:
     concurrency: 0
+    tryImportMissing: true
   artifacts:
     - image: cms
       context: cms
@@ -71,6 +72,7 @@ profiles:
             dockerfile: Dockerfile.prod
       local:
         push: true
+        tryImportMissing: true
     manifests:
       kustomize:
         paths:
@@ -93,6 +95,7 @@ profiles:
             dockerfile: Dockerfile.prod
       local:
         push: true
+        tryImportMissing: true
     manifests:
       kustomize:
         paths:
