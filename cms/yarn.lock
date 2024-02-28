@@ -8735,6 +8735,11 @@ statuses@2.0.1, statuses@^2.0.1:
   resolved "https://registry.npmjs.org/statuses/-/statuses-1.5.0.tgz"
   integrity sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==
 
+strapi-plugin-server-route-permission@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/strapi-plugin-server-route-permission/-/strapi-plugin-server-route-permission-2.0.5.tgz#fcfca47c8b068f7c86a87f7e128405d86fdfc791"
+  integrity sha512-hiV1A82NeH8SHLiSH4JdATAg+TdizUzXTi+ojMRwGs033P7jzuzdjHJiQpq1bKiJEWMGdr3pT1f3c2BHT65yow==
+
 stream-chain@2.2.5, stream-chain@^2.2.5:
   version "2.2.5"
   resolved "https://registry.npmjs.org/stream-chain/-/stream-chain-2.2.5.tgz"
