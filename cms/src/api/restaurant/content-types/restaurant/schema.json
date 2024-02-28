@@ -36,6 +36,12 @@
     "numberOfReviews": {
       "type": "integer",
       "required": true
+    },
+    "priceLevel": {
+      "type": "string"
+    },
+    "priceRange": {
+      "type": "string"
     }
   }
 }
