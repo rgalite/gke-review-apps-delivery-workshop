@@ -4,4 +4,9 @@
 - op: replace
   path: /metadata/annotations/run.googleapis.com~1ingress
   value: internal-and-cloud-load-balancing
-
+- op: replace
+  path: /metadata/annotations/run.googleapis.com~1launch-stage
+  value: BETA
+- op: replace
+  path: /spec/template/metadata/annotations/run.googleapis.com~1network-interfaces
+  value: '[{"network":"foodvisor","subnetwork":"foodvisor-direct-vpc-subnet"}]'
