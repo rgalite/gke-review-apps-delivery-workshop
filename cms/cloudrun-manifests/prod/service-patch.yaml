@@ -50,6 +50,11 @@
       secretKeyRef:
         key: latest
         name: foodvisor_cms_jwt_secret
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: BASE_URL
+    value: /cms
 - op: replace
   path: /spec/template/spec/serviceAccountName
   value: foodvisor-backend@mgalite-cloud-run-service-mesh.iam.gserviceaccount.com
