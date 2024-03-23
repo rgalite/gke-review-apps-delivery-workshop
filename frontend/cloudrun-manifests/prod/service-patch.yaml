@@ -1,0 +1,7 @@
+- op: replace
+  path: /spec/template/spec/serviceAccountName
+  value: foodvisor-frontend@mgalite-cloud-run-service-mesh.iam.gserviceaccount.com
+- op: replace
+  path: /metadata/annotations/run.googleapis.com~1ingress
+  value: internal-and-cloud-load-balancing
+

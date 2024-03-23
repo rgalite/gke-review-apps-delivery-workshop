@@ -1,0 +1,26 @@
+# Manifests describing the cloud run service
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: foodvisor-frontend
+spec:
+  template:
+    metadata:
+      annotations: {}
+    spec:
+      containers:
+        - image: frontend
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          env:
+          - name: HOSTNAME
+            value: "0.0.0.0"
+          - name: STRAPI_API_URL
+            value: http://cms:1337/api

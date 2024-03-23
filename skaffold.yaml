@@ -104,3 +104,13 @@ profiles:
   - name: cb
     build:
       googleCloudBuild: {}
+  - name: run
+    manifests:
+      kustomize:
+        paths:
+          - cms/cloudrun-manifests/prod
+          - frontend/cloudrun-manifests/prod
+    deploy:
+      cloudrun:
+        region: europe-west1
+

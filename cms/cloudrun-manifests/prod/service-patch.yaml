@@ -1,0 +1,68 @@
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: NODE_ENV
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_database_url
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: API_TOKEN_SALT
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_api_token_salt
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: APP_KEYS
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_app_keys
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ADMIN_JWT_SECRET
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_admin_jwt_secret
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: TRANSFER_TOKEN_SALT
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_transfer_token_salt
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: JWT_SECRET
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_jwt_secret
+- op: replace
+  path: /spec/template/spec/serviceAccountName
+  value: foodvisor-backend@mgalite-cloud-run-service-mesh.iam.gserviceaccount.com
+- op: add
+  path: /spec/template/spec/containers/-
+  value:
+    name: cloud-sql-proxy
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+    args:
+      - mgalite-cloud-run-service-mesh:us-central1:cms-instance
+      - --structured-logs
+      - --port=5432
+      - --auto-iam-authn
+- op: replace
+  path: /metadata/annotations/run.googleapis.com~1ingress
+  value: internal-and-cloud-load-balancing
