@@ -10,6 +10,7 @@ export default async function Home() {
     restaurants = restaurantsData.data || []
   } catch (error) {
     console.error(error)
+    console.error(await error.response.text())
     restaurants = []
   }
 

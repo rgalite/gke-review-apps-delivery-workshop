@@ -11,5 +11,14 @@ export function getRestaurants(params = {}) {
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then((response) => response.json())
+  }).then((response) => {
+    if (!response.ok) {
+      const error = new Error(response.statusText)
+      error.response = response
+
+      throw error
+    }
+
+    return response.json()
+  })
 }
