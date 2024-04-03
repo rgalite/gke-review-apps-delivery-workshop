@@ -2,6 +2,7 @@
   path: /spec/template/spec/containers/0/env/-
   value:
     name: NODE_ENV
+    value: production
 - op: add
   path: /spec/template/spec/containers/0/env/-
   value:
