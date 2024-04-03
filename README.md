@@ -1,13 +1,32 @@
 # Introduction
 
-This repository is a playground to play with different technologies on GCP.
+Each service comes with its own service account.
+Make sure you create them:
 
-## Labs
+```bash
+gcloud iam service-accounts create foodvisor-frontend
+```
 
-- [Lab 1 - Review Apps](../../tree/labs/review-apps)
+```bash
+gcloud iam service-accounts create foodvisor-backedn
+```
 
-  Review apps are short-lived application environments that enable developers, designers, QA personnel, product managers, and other reviewers to assess and interact with code modifications as part of the code review process. These environments are built using the branch's code, providing a tangible and interactive platform for reviewing proposed changes.
-
-  Through this workshop, we will guide you through the journey of establishing a platform that leverages GKE for the creation of disposable environments. We will incorporate ingresses using the Kubernetes Gateway API to direct traffic towards the short-lived applications. Lastly, we will utilize Config Connector to effortlessly construct the infrastructure dynamically.
-
-- [Lab 2 - Deploy on Cloud Run](../../tree/labs/cloudrun)
+```yaml
+defaultService: projects/mgalite-cloud-run-service-mesh/global/backendServices/custom-do-foodvisor-crsm-mgalite-d-foodvisor-f-14fa-be-c700b
+name: foodvisor-crsm-mgalite-demo-altostrat-com
+routeRules:
+  - matchRules:
+      - prefixMatch: /cms
+    priority: 1
+    routeAction:
+      weightedBackendServices:
+        - backendService: projects/mgalite-cloud-run-service-mesh/global/backendServices/custom-dom-foodvisor-crsm-mgalite-dem-foodvisor-14fa-be-10aa9
+          weight: 100
+  - matchRules:
+      - prefixMatch: /
+    priority: 10
+    routeAction:
+      weightedBackendServices:
+        - backendService: projects/mgalite-cloud-run-service-mesh/global/backendServices/custom-do-foodvisor-crsm-mgalite-d-foodvisor-f-14fa-be-c700b
+          weight: 100
+```
