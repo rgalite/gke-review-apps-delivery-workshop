@@ -1,4 +1,5 @@
 kubernetes-manifests
+cloudrun-manifests
 node_modules
 .tmp/
 .cache/
