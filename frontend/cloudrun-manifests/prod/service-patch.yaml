@@ -6,7 +6,7 @@
   value: internal-and-cloud-load-balancing
 - op: replace
   path: /metadata/annotations/run.googleapis.com~1launch-stage
-  value: BETA
+  value: ALPHA
 - op: replace
   path: /spec/template/metadata/annotations/autoscaling.knative.dev~1minScale
   value: 1
@@ -19,3 +19,9 @@
 - op: replace
   path: /spec/template/metadata/annotations/run.googleapis.com~1network-interfaces
   value: '[{"network":"foodvisor","subnetwork":"foodvisor-direct-vpc-subnet"}]'
+- op: replace
+  path: /spec/template/metadata/annotations/run.googleapis.com~1execution-environment
+  value: gen2
+- op: replace
+  path: /spec/template/metadata/annotations/run.googleapis.com~1mesh
+  value: projects/602482843963/locations/global/meshes/mesh
