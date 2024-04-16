@@ -1,0 +1,89 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: gke-review-apps-delivery-workshop
+build:
+  local:
+    concurrency: 0
+    tryImportMissing: true
+  artifacts:
+    - image: cms
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer: ["**/*"]
+portForward:
+  - resourceType: service
+    resourceName: postgres
+    port: 5432
+    localPort: 5432
+    address: 0.0.0.0
+  - resourceType: service
+    resourceName: cms
+    port: 1337
+    localPort: 1337
+    address: 0.0.0.0
+profiles:
+  - name: dev
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/dev
+    deploy:
+      kubectl:
+        hooks:
+          after:
+            - container:
+                command:
+                  - psql
+                  - -c
+                  - SELECT 'CREATE DATABASE cms' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'cms')
+                  - -U
+                  - postgres
+                podName: postgres-*
+      kubeContext: minikube
+    activation:
+      - command: dev
+  - name: prod
+    build:
+      artifacts:
+        - image: cms
+          docker:
+            dockerfile: Dockerfile.prod
+            buildArgs:
+              BASE_URL: /cms
+      local:
+        push: true
+        tryImportMissing: true
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/prod
+    deploy:
+      statusCheckDeadlineSeconds: 180
+  - name: qa
+    build:
+      artifacts:
+        - image: cms
+          docker:
+            dockerfile: Dockerfile.prod
+            buildArgs:
+              BASE_URL: /cms
+      local:
+        push: true
+        tryImportMissing: true
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/qa
+  - name: cb
+    build:
+      googleCloudBuild: {}
+  - name: run
+    manifests:
+      kustomize:
+        paths:
+          - cloudrun-manifests/prod
+    deploy:
+      cloudrun:
+        region: europe-west9
