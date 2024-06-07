@@ -426,8 +426,8 @@ The application relies on a PostgreSQL database. Create a Cloud SQL instance wit
 ```bash
 gcloud sql instances create $INSTANCE_NAME \
   --database-version=POSTGRES_14 \
-  --cpu=4 \
-  --memory=16GB \
+  --cpu=2 \
+  --memory=8GB \
   --database-flags=cloudsql.iam_authentication=on \
   --region=$REGION
 ```
