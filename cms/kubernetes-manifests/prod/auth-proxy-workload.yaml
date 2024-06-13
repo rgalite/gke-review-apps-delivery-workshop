@@ -1,0 +1,14 @@
+apiVersion: cloudsql.cloud.google.com/v1
+kind: AuthProxyWorkload
+metadata:
+  name: auth-proxy-workload
+spec:
+  workloadSelector:
+    kind: "Deployment"
+    labels:
+      uses-auth-proxy: true
+  instances:
+  - connectionString: "mgalite-appmod:europe-west1:cms-instance"
+    portEnvName: "DB_PORT"
+    hostEnvName: "DB_HOST"
+    autoIAMAuthN: true

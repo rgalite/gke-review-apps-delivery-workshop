@@ -6,6 +6,7 @@ resources:
 - ../config
 - serviceaccount.yaml
 - httproute.yaml
+- auth-proxy-workload.yaml
 
 patches:
 - path: deployment.yaml
@@ -24,10 +25,10 @@ replacements:
       fieldPath: data.INSTANCE_CONNECTION_NAME
     targets:
       - select:
-          kind: Deployment
-          name: cms
+          kind: AuthProxyWorkload
+          name: auth-proxy-workload
         fieldPaths:
-          - spec.template.spec.containers.[name=cloud-sql-proxy].args.3
+          - spec.instances.0.connectionString
   - source:
       kind: ConfigMap
       name: cms-config
