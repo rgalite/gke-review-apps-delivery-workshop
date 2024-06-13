@@ -1,27 +1,28 @@
-- op: add
-  path: "/spec/template/spec/containers/-"
-  value:
-    name: cloud-sql-proxy
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
-    args:
-      - "--structured-logs"
-      - "--port=5432"
-      - "--auto-iam-authn"
-      - "INSTANCE_CONNECTION_NAME" # will be replaced by config.data.INSTANCE_CONNECTION_NAME
-    securityContext:
-      runAsNonRoot: true
-    resources:
-      requests:
-        memory: "2Gi"
-        cpu: "1"
-      limits:
-        memory: "2Gi"
-        cpu: "1"
-- op: replace
-  path: "/spec/template/spec/containers/0/env/2/valueFrom"
-  value:
-    secretKeyRef:
-      key: DATABASE_URL
-      name: cms-secrets
 - op: remove
-  path: "/spec/template/spec/containers/0/env/2/value"
+  path: "/spec/template/spec/containers/0/env/2"
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: DATABASE_HOST
+    value: "set-by-operator"
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: DATABASE_PORT
+    value: "set-by-operator"
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: DATABASE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: cms-secrets
+        key: GCP_SQL_SERVICE_ACCOUNT
+- op: add
+  path: "/spec/template/spec/containers/0/env/-"
+  value:
+    name: DATABASE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: cms-secrets
+        key: DATABASE_NAME
