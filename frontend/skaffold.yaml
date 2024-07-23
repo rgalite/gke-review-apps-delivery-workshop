@@ -1,0 +1,70 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: gke-review-apps-delivery-workshop
+build:
+  local:
+    concurrency: 0
+    tryImportMissing: true
+  artifacts:
+    - image: frontend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer: ["**/*"]
+portForward:
+  - resourceType: service
+    resourceName: frontend
+    port: 3000
+    address: 0.0.0.0
+    localPort: 3000
+profiles:
+  - name: dev
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/dev
+    deploy:
+      kubeContext: minikube
+    activation:
+      - command: dev
+  - name: prod
+    build:
+      artifacts:
+        - image: frontend
+          docker:
+            dockerfile: Dockerfile.prod
+      local:
+        push: true
+        tryImportMissing: true
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/prod
+    deploy:
+      statusCheckDeadlineSeconds: 180
+  - name: qa
+    build:
+      artifacts:
+        - image: frontend
+          docker:
+            dockerfile: Dockerfile.prod
+      local:
+        push: true
+        tryImportMissing: true
+    manifests:
+      kustomize:
+        paths:
+          - kubernetes-manifests/prod
+  - name: cb
+    build:
+      googleCloudBuild: {}
+  - name: run
+    manifests:
+      kustomize:
+        paths:
+          - cloudrun-manifests/prod
+    deploy:
+      cloudrun:
+        region: europe-west9
+

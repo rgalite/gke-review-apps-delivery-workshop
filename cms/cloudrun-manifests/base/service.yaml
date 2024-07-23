@@ -1,0 +1,27 @@
+# Manifests describing the cloud run service
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: foodvisor-cms
+spec:
+  template:
+    metadata:
+      annotations: {}
+    spec:
+      containers:
+        - image: cms
+          ports:
+            - containerPort: 1337
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1000m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+          env:
+            - name: HOSTNAME
+              value: localhost
+            - name: DATABASE_CLIENT
+              value: postgres
+          name: cms
