@@ -263,7 +263,7 @@ export GATEWAY_NAMESPACE=infra-resources
 3. Deploy the gateway.
 
    ```bash
-   kubectl apply -f gateway.html
+   kubectl apply -f gateway.yaml
    ```
 
 4. Monitor the gateway deployment with the following command:
