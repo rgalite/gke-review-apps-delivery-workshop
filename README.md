@@ -431,55 +431,50 @@ gcloud sql instances create $INSTANCE_NAME \
   --region=$REGION
 ```
 
-Create a database for the application. We'll name it `cms-staging`.
-
-```bash
-gcloud sql databases create cms-staging --instance=$INSTANCE_NAME
-```
-
 ## Give access to the Cloud SQL instance to future CMS workload
 
 ```bash
-export CMS_SERVICE_ACCT=cms-sa-staging
+export CMS_SERVICE_ACCT=cms-sa
+export DATABASE_NAME=cms-staging
 ```
 
 1. Create a Google service account for the cms workload.
    The Kubernetes `cms` workload will be mapped to the Google Service Account `cms-sa`. The CMS workload will be able to connect to the cloud SQL instance through workload identity.
 
-  ```bash
-  gcloud iam service-accounts create $CMS_SERVICE_ACCT
-  ```
+```bash
+gcloud iam service-accounts create $CMS_SERVICE_ACCT
+```
 
 2. Give the Google service account the `instance User` role so it can access the instance.
 
-  ```bash
-  gcloud projects add-iam-policy-binding $PROJECT_ID \
-    --member "serviceAccount:$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
-    --role "roles/cloudsql.instanceUser"
+```bash
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member "serviceAccount:$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role "roles/cloudsql.instanceUser"
 ```
 
 3. Give the service account the `Cloud SQL Client` role so it can perform SQL queries.
 
-  ```bash
-  gcloud projects add-iam-policy-binding $PROJECT_ID \
-    --member "serviceAccount:$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
-    --role "roles/cloudsql.client"
-  ```
+```bash
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member "serviceAccount:$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role "roles/cloudsql.client"
+```
 
 4. Create a SQL User the service account will use to connect to the database.
 
-  ```bash
-  gcloud sql users create $CMS_SERVICE_ACCT@$PROJECT_ID.iam \
-    --instance=$INSTANCE_NAME \
-    --type=cloud_iam_service_account
-  ```
+```bash
+gcloud sql users create $CMS_SERVICE_ACCT@$PROJECT_ID.iam \
+  --instance=$INSTANCE_NAME \
+  --type=cloud_iam_service_account
+```
 
 5. Create a database the staging environment will use.
 
-  ```bash
-  gcloud sql databases create cms-staging \
-    --instance=$INSTANCE_NAME
-  ```
+```bash
+gcloud sql databases create cms-staging \
+  --instance=$INSTANCE_NAME
+```
 
 Allow the future Kubernetes Service Account `cms` to impersonate the Google Service account
 
@@ -513,6 +508,7 @@ gcloud artifacts repositories add-iam-policy-binding $REPOSITORY_NAME \
 
 ```bash
 export SKAFFOLD_DEFAULT_REPO=$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME
+export SKAFFOLD_NAMESPACE=staging
 ```
 
 1. Create a namespace for the staging environment.
@@ -535,21 +531,19 @@ Skaffold aids in continuous development for Kubernetes applications by streamlin
    The configuration file will be stored as `cms/kubernetes-manifests/config/.env.config` and the secrets file as `cms/kubernetes-manifests/config/.secret.config`.
 
 ```bash
-./generate-configs cms
+./generate-config.sh cms
 ```
 
 4. Run the following command to generate config files for `frontend` deployment.
    The configuration file will be stored as `frontend/kubernetes-manifests/prod/.env.config` and the secrets file as `frontend/kubernetes-manifests/prod/.env.secret`.
 
 ```bash
-./generate-configs frontend
+./generate-config.sh frontend
 ```
 
 5. Deploy the application.
 
 ```bash
-export SKAFFOLD_DEFAULT_REPO=$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME
-export SKAFFOLD_NAMESPACE=staging
 skaffold run -p prod
 ```
 
@@ -770,4 +764,3 @@ Delete the database
 gcloud sql databases delete cms-staging \
     --instance=$INSTANCE_NAME
 ```
-
