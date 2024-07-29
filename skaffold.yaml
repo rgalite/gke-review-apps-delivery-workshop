@@ -12,13 +12,13 @@ build:
       docker:
         dockerfile: Dockerfile
       sync:
-        infer: ["cms/**/*"]
+        infer: ["**/*"]
     - image: frontend
       context: frontend
       docker:
         dockerfile: Dockerfile
       sync:
-        infer: ["frontend/**/*"]
+        infer: ["**/*"]
 portForward:
   - resourceType: service
     resourceName: postgres
