@@ -9,4 +9,32 @@ module.exports = [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-];
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'dl.airtable.com',
+            'www.okta.com', // Base URL of the provider's logo
+            'cdn2.iconfinder.com',
+          ],
+          'media-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'dl.airtable.com',
+            'www.okta.com', // Base URL of the provider's logo
+            'cdn2.iconfinder.com',
+          ],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+]

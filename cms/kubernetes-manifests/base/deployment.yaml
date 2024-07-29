@@ -57,6 +57,21 @@ spec:
             secretKeyRef:
               key: JWT_SECRET
               name: cms-secrets
+        - name: STRAPI_LICENSE
+          valueFrom:
+            secretKeyRef:
+              key: STRAPI_LICENSE
+              name: cms-secrets
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: GOOGLE_CLIENT_ID
+              name: cms-secrets
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: GOOGLE_CLIENT_SECRET
+              name: cms-secrets
         readinessProbe:
           httpGet:
             path: /_health
