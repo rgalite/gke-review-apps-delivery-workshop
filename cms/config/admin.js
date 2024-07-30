@@ -18,6 +18,7 @@ module.exports = ({ env }) => ({
                 'https://www.googleapis.com/auth/userinfo.profile',
               ],
               callbackURL:
+                env('BASE_URL', '') +
                 strapi.admin.services.passport.getStrategyCallbackURL('google'),
             },
             (request, accessToken, refreshToken, profile, done) => {
