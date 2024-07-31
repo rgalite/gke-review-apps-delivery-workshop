@@ -56,6 +56,30 @@
   value:
     name: BASE_URL
     value: /cms
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: STRAPI_LICENSE
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_strapi_license
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: GOOGLE_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_google_client_id
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: GOOGLE_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        key: latest
+        name: foodvisor_cms_google_client_secret
 - op: replace
   path: /spec/template/spec/serviceAccountName
   value: foodvisor-backend@mgalite-cloud-run-service-mesh.iam.gserviceaccount.com
