@@ -8,13 +8,6 @@ build:
     tryImportMissing: true
   artifacts:
     - image: cms
-      context: cms
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        infer: ["**/*"]
-    - image: frontend
-      context: frontend
       docker:
         dockerfile: Dockerfile
       sync:
@@ -30,18 +23,12 @@ portForward:
     port: 1337
     localPort: 1337
     address: 0.0.0.0
-  - resourceType: service
-    resourceName: frontend
-    port: 3000
-    address: 0.0.0.0
-    localPort: 3000
 profiles:
   - name: dev
     manifests:
       kustomize:
         paths:
-          - cms/kubernetes-manifests/dev
-          - frontend/kubernetes-manifests/dev
+          - kubernetes-manifests/dev
     deploy:
       kubectl:
         hooks:
@@ -61,46 +48,34 @@ profiles:
     build:
       artifacts:
         - image: cms
-          context: cms
           docker:
             dockerfile: Dockerfile.prod
             buildArgs:
               BASE_URL: /cms
-        - image: frontend
-          context: frontend
-          docker:
-            dockerfile: Dockerfile.prod
       local:
         push: true
         tryImportMissing: true
     manifests:
       kustomize:
         paths:
-          - cms/kubernetes-manifests/prod
-          - frontend/kubernetes-manifests/prod
+          - kubernetes-manifests/prod
     deploy:
       statusCheckDeadlineSeconds: 180
   - name: qa
     build:
       artifacts:
         - image: cms
-          context: cms
           docker:
             dockerfile: Dockerfile.prod
             buildArgs:
               BASE_URL: /cms
-        - image: frontend
-          context: frontend
-          docker:
-            dockerfile: Dockerfile.prod
       local:
         push: true
         tryImportMissing: true
     manifests:
       kustomize:
         paths:
-          - frontend/kubernetes-manifests/prod
-          - cms/kubernetes-manifests/qa
+          - kubernetes-manifests/qa
   - name: cb
     build:
       googleCloudBuild: {}
@@ -108,9 +83,7 @@ profiles:
     manifests:
       kustomize:
         paths:
-          - cms/cloudrun-manifests/prod
-          - frontend/cloudrun-manifests/prod
+          - cloudrun-manifests/prod
     deploy:
       cloudrun:
-        region: europe-west1
-
+        region: europe-west9
