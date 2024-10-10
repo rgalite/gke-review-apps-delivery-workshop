@@ -213,7 +213,7 @@ Visit your URL and make sure the `/api/restaurants` path returns something.
 gcloud run services update frontend --update-env-vars="STRAPI_API_URL=$BACKEND_URL/api" --region $REGION
 ```
 
-You should see the restaurants being loaded.
+You should see the restaurants loaded.
 
 ## Expose everything behind a load balancer
 
