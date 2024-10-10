@@ -12,4 +12,10 @@ This repository is a playground to play with different technologies on GCP.
 
 - [Lab 2 - Cloud Run](../../tree/labs/cloud-run)
 
+  In this workshop, we'll demystify Cloud Run, a powerful service that lets you run stateless containers that are automatically scaled up or down based on demand. You'll gain practical experience through hands-on labs and exercises. It covers the following topics:
+  
+  - Deploying applications from source code or container images
+  - Configuring custom domains and SSL certificates
+  - Integrating with other Google Cloud services Get ready to unlock the potential of serverless with Cloud Run!
+
 - [Lab 3 - Cloud Run Service Mesh](../../tree/labs/cloudrun-service-mesh)
