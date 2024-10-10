@@ -216,3 +216,36 @@ gcloud run services update frontend --update-env-vars="STRAPI_API_URL=$BACKEND_U
 You should see the restaurants being loaded.
 
 ## Expose everything behind a load balancer
+
+We want the frontend and the cms applications available behind a single domain name.
+
+- Reserve an IP for your global load balancer.
+
+  ```bash
+  gcloud compute addresses create external-ip --global
+  ```
+
+- Save the domain nip.io that will match your IP.
+
+  ```bash
+  export DOMAIN_NAME=$EXTERNAL_IP.nip.io
+  ```
+
+- Create a Google-managed certificate for your load balancer.
+
+  ```bash
+  gcloud compute ssl-certificates create app-cert \
+      --domains $DOMAIN_NAME
+  ```
+
+- Create a load balancer by following the [documentation](https://cloud.google.com/load-balancing/docs/https/setting-up-https-serverless#console_1). Select the IP and certificate we just created.
+
+After a few minutes, the app should be available at `$DOMAIN_NAME`.
+
+- Update the frontend application to only allow traffic from the load balancer.
+
+  ```bash
+  gcloud run services update frontend \
+      --ingress=internal-and-cloud-load-balancing \
+      --region=$REGION
+  ```
