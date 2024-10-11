@@ -229,6 +229,12 @@ We want the frontend and the cms applications available behind a single domain n
   gcloud compute addresses create external-ip --global
   ```
 
+- Save it to your environment variable.
+
+  ```bash
+  export EXTERNAL_IP=$(gcloud compute addresses describe external-ip --global --format="get(address)")
+  ```
+
 - Save the domain nip.io that will match your IP.
 
   ```bash
