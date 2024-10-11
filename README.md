@@ -93,7 +93,7 @@ gcloud run deploy frontend \
       --database-version=POSTGRES_14 \
       --region $REGION \
       --tier db-g1-small \
-      --root-password $PG_ROOT_PASSWORD
+      --root-password $PG_ROOT_PASSWORD \
       --async
   ```
 
@@ -212,8 +212,8 @@ Visit your URL and make sure the `/api/restaurants` path returns something.
 ## Update the frontend application service
 
 ```bash
-gcloud run services update frontend
-    --update-env-vars="STRAPI_API_URL=$BACKEND_URL/api"
+gcloud run services update frontend \
+    --update-env-vars="STRAPI_API_URL=$BACKEND_URL/api" \
     --region=$REGION
 ```
 
