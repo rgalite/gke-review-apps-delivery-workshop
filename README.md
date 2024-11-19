@@ -259,3 +259,57 @@ After a few minutes, the app should be available at `$DOMAIN_NAME`.
       --ingress=internal-and-cloud-load-balancing \
       --region=$REGION
   ```
+
+## Secure your API
+
+### Change the API to a private service
+
+You don't want the API exposed to the public.
+
+```bash
+gcloud run services update cms --ingress=internal --region=$REGION
+```
+
+If you browse to your cms service URL, you should get a 404 error.
+
+Problem is, your frontend, won't have access to your API because the traffic is not considered as internal.
+
+### Access your API from the frontend internally
+
+In this step, you'll create a VPC network and redirect the traffic from the frontend app to it.
+
+Create a VPC network:
+
+```bash
+gcloud compute networks create cms-vpc \
+    --project=$PROJECT_ID \
+    --subnet-mode=custom
+```
+
+Create a subnet in the region `$REGION`.
+
+```bash
+gcloud compute networks subnets create cms-direct-vpc-egress \
+    --project=$PROJECT_ID \
+    --range=10.0.0.0/24 \
+    --network=cms-vpc \
+    --enable-private-ip-google-access \
+    --region=$REGION
+
+gcloud compute networks subnets update cms-direct-vpc-egress \
+    --project=$PROJECT_ID \
+    --enable-private-ip-google-access \
+    --region=$REGION
+```
+
+Make your frontend app to direct all its egress through the VPC.
+
+```bash
+gcloud run services update frontend \
+    --network=cms-vpc \
+    --subnet=cms-direct-vpc-egress \
+    --vpc-egress=all-traffic \
+    --region=$REGION
+```
+
+Your API is now accessible only from the frontend, internally.
