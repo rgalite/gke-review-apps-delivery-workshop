@@ -6,7 +6,7 @@ In this workshop, we'll demystify Cloud Run, a powerful service that lets you ru
 
 - Deploying applications from source code or container images
 - Configuring custom domains and SSL certificates
-- Integrating with other Google Cloud services Get ready to unlock the potential of serverless with Cloud Run!
+- Integrating with other Google Cloud services
 
 ## Get the project
 
