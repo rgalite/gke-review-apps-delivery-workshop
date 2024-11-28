@@ -63,8 +63,8 @@ export PROJECT_ID=$(gcloud config get project)
   ```
 
   ```bash
-  export FRONTEND_CONTAINER_IMAGE=europe-west9-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/frontend:$IMAGE_TAG
-  export CMS_CONTAINER_IMAGE=europe-west9-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/cms:$IMAGE_TAG
+  export FRONTEND_CONTAINER_IMAGE=$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/frontend:$IMAGE_TAG
+  export CMS_CONTAINER_IMAGE=$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/cms:$IMAGE_TAG
   ```
 
 ## Deploy the frontend service to Cloud Run
