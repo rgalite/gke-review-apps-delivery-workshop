@@ -60,6 +60,9 @@ export PROJECT_ID=$(gcloud config get project)
 
   ```bash
   export IMAGE_TAG=...
+  ```
+
+  ```bash
   export FRONTEND_CONTAINER_IMAGE=europe-west9-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/frontend:$IMAGE_TAG
   export CMS_CONTAINER_IMAGE=europe-west9-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_NAME/cms:$IMAGE_TAG
   ```
