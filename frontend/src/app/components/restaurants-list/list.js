@@ -12,6 +12,8 @@ export default function RestaurantsList({ restaurants }) {
           rating={restaurant.attributes.rating}
           description={restaurant.attributes.description}
           numberOfReviews={restaurant.attributes.numberOfReviews}
+          priceLevel={restaurant.attributes.priceLevel}
+          priceRange={restaurant.attributes.priceRange}
         />
       ))}
     </div>
