@@ -113,4 +113,3 @@ profiles:
     deploy:
       cloudrun:
         region: europe-west1
-
