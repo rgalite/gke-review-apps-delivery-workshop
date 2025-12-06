@@ -428,7 +428,8 @@ gcloud sql instances create $INSTANCE_NAME \
   --database-version=POSTGRES_14 \
   --tier=db-g1-small \
   --database-flags=cloudsql.iam_authentication=on \
-  --region=$REGION
+  --region=$REGION \
+  --async
 ```
 
 ## Give access to the Cloud SQL instance to future CMS workload
@@ -472,7 +473,7 @@ gcloud sql users create $CMS_SERVICE_ACCT@$PROJECT_ID.iam \
 5. Create a database the staging environment will use.
 
 ```bash
-gcloud sql databases create cms-staging \
+gcloud sql databases create $DATABASE_NAME \
   --instance=$INSTANCE_NAME
 ```
 
@@ -481,7 +482,7 @@ Allow the future Kubernetes Service Account `cms` to impersonate the Google Serv
 ```bash
 gcloud iam service-accounts add-iam-policy-binding $CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com \
   --role roles/iam.workloadIdentityUser \
-  --member "serviceAccount:$PROJECT_ID.svc.id.goog[staging/cms]"
+  --member "serviceAccount:$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]"
 ```
 
 ## Create an Artifact Registry repository to store our container images
@@ -514,13 +515,13 @@ export SKAFFOLD_NAMESPACE=staging
 1. Create a namespace for the staging environment.
 
 ```bash
-kubectl create ns staging
+kubectl create ns $SKAFFOLD_NAMESPACE
 ```
 
 2. Add a label to the namespace so http routes can attach the gateway.
 
 ```bash
-kubectl label ns staging shared-gateway-access='true'
+kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true'
 ```
 
 For deployment, we’ll use Skaffold.
