@@ -640,51 +640,19 @@ kubectl annotate namespace $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=
 kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true'
 ```
 
-4. Update the `.env.config` file with the following command:
+4. Update the `.env.config` cms file with the following command:
 
 ```bash
-cat << EOF > cms/kubernetes-manifests/config/.env.config
-PROJECT_ID=$PROJECT_ID
-INSTANCE_CONNECTION_NAME=$PROJECT_ID:$REGION:$INSTANCE_NAME
-GCP_SERVICE_ACCOUNT=$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
-HTTP_ROUTE_HOSTNAME=$SKAFFOLD_NAMESPACE.$DOMAIN_NAME
-INSTANCE_NAME=$INSTANCE_NAME
-WORKLOAD_IDENTITY_GCP_SERVICE_ACCOUNT=projects/$PROJECT_ID/serviceAccounts/$CMS_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
-WORKLOAD_IDENTITY_SERVICE_ACCOUNT=$PROJECT_ID.svc.id.goog[$SKAFFOLD_NAMESPACE/cms]
-DATABASE_NAME=cms-$SKAFFOLD_NAMESPACE
-EOF
+./generate-config.sh cms cms/kubernetes-manifests/prod
 ```
 
-5. Update the `.env.secret` file with the following command:
+5. Update the `.env.config` file for the frontend with the following command:
 
 ```bash
-cat << EOF > cms/kubernetes-manifests/config/.env.secret
-APP_KEYS="$(echo -n "APP_KEYS$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)"
-API_TOKEN_SALT=$(echo -n "API_TOKEN_SALT$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
-ADMIN_JWT_SECRET=$(echo -n "ADMIN_JWT_SECRET$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
-TRANSFER_TOKEN_SALT=$(echo -n "TRANSFER_TOKEN_SALT$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
-JWT_SECRET=$(echo -n "JWT_SECRET$SKAFFOLD_NAMESPACE" | md5sum | cut -d ' ' -f 1)
-DATABASE_URL=postgres://$CMS_SERVICE_ACCT%40$PROJECT_ID.iam:@localhost:5432/cms-$SKAFFOLD_NAMESPACE
-EOF
+./generate-config.sh frontend frontend/kubernetes-manifests/prod
 ```
 
-6. Update the `.env.config` file for the frontend with the following command:
-
-```bash
-cat << EOF > frontend/kubernetes-manifests/prod/.env.config
-HTTP_ROUTE_HOSTNAME=$SKAFFOLD_NAMESPACE.$DOMAIN_NAME
-EOF
-```
-
-7. Update the `.env.secret` file for the frontend with the following command:
-
-```bash
-cat << EOF > frontend/kubernetes-manifests/prod/.env.secret
-STRAPI_API_TOKEN=STRAPI_API_TOKEN
-EOF
-```
-
-8. Run the following command to deploy the new app and its infra
+6. Run the following command to deploy the new app and its infra
 
 ```bash
 skaffold run -p qa
