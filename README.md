@@ -552,25 +552,25 @@ After a few seconds, the application should be deployed and accessible at `https
 
 # Deploying a Review App
 
-## Installing Config Connector
+## Install Crossplane
 
-Make sure [Config Connector](https://cloud.google.com/config-connector/docs/how-to/install-manually) is installed before proceeding.
+Make sure [Crossplane](https://docs.crossplane.io/latest/get-started/install/) is installed before proceeding.
 
 ```bash
-export CC_SERVICE_ACCT=config-connector
+export CP_SERVICE_ACCT=crossplane
 ```
 
 1. Create a service account that will create the resources.
 
 ```bash
-gcloud iam service-accounts create $CC_SERVICE_ACCT
+gcloud iam service-accounts create $CP_SERVICE_ACCT
 ```
 
 2. Give the role `Editor` to this service account.
 
 ```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$CC_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
+  --member="serviceAccount:$CP_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/editor"
 ```
 
@@ -578,43 +578,73 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 
 ```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$CC_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
+  --member="serviceAccount:$CP_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/iam.securityAdmin"
 ```
 
-4. Allow the Kubernetes Service Account `cnrm-controller-manager` to impersonate the Google Service account.
+4. Allow the Kubernetes Service Account `crossplane` to impersonate the Google Service account.
 
 ```bash
 gcloud iam service-accounts add-iam-policy-binding \
-  $CC_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com \
-  --member="serviceAccount:$PROJECT_ID.svc.id.goog[cnrm-system/cnrm-controller-manager]" \
+  $CP_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com \
+  --member="serviceAccount:$PROJECT_ID.svc.id.goog[crossplane-system/crossplane]" \
   --role="roles/iam.workloadIdentityUser"
 ```
 
-5. Create a file named `configconnector.yaml``.
+5. Install the Crossplane GCP Provider.
 
 ```bash
-cat << EOF > configconnector.yaml
-apiVersion: core.cnrm.cloud.google.com/v1beta1
-kind: ConfigConnector
+cat << EOF > provider.yaml
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
 metadata:
-  name: configconnector.core.cnrm.cloud.google.com
+  name: upbound-provider-family-gcp
 spec:
- mode: cluster
- googleServiceAccount: "$CC_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com"
+  package: xpkg.upbound.io/upbound/provider-family-gcp:v2.3.0
 EOF
 ```
 
-6. And apply it.
+6. Create a file named `deployruntimeconfig.yaml``.
 
 ```bash
-kubectl apply -f configconnector.yaml
+cat << EOF > deployruntimeconfig.yaml
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: workload-identity-runtimeconfig
+spec:
+  serviceAccountTemplate:
+    metadata:
+      annotations:
+        iam.gke.io/gcp-service-account: $CP_SERVICE_ACCT@$PROJECT_ID.iam.gserviceaccount.com
+      name: crossplane
+EOF
 ```
 
-7. Run the following command to wait for the Config Connector to be ready.
+7. And apply it.
 
 ```bash
-kubectl wait -n cnrm-system --for=condition=Ready pod --all
+kubectl apply -f deployruntimeconfig.yaml
+```
+
+8. Create a file named `providerconfig.yaml`
+```bash
+cat << EOF > providerconfig.yaml
+apiVersion: gcp.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  projectID: $PROJECT_ID
+  credentials:
+    source: InjectedIdentity
+EOF
+```
+
+9. And apply it.
+
+```bash
+kubectl apply -f providerconfig.yaml
 ```
 
 ## Deploying a Review App with its infrastructure
