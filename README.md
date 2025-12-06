@@ -428,7 +428,8 @@ gcloud sql instances create $INSTANCE_NAME \
   --database-version=POSTGRES_14 \
   --tier=db-g1-small \
   --database-flags=cloudsql.iam_authentication=on \
-  --region=$REGION
+  --region=$REGION \
+  --async
 ```
 
 ## Give access to the Cloud SQL instance to future CMS workload
