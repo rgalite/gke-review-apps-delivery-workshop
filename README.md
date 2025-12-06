@@ -634,7 +634,7 @@ kubectl create namespace $SKAFFOLD_NAMESPACE
 kubectl annotate namespace $SKAFFOLD_NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID
 ```
 
-3. Label your namespace so routes deplayed are attached to the gateway.
+3. Label your namespace so routes deployed are attached to the gateway.
 
 ```bash
 kubectl label ns $SKAFFOLD_NAMESPACE shared-gateway-access='true'
