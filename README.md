@@ -16,6 +16,7 @@ We will cover the following topics:
 
 # Setup
 
+<<<<<<< HEAD
 ## Activate required APIs
 
 This workshop will need the following APIs enabled:
@@ -764,3 +765,12 @@ Delete the database
 gcloud sql databases delete cms-staging \
     --instance=$INSTANCE_NAME
 ```
+=======
+  In this workshop, we'll demystify Cloud Run, a powerful service that lets you run stateless containers that are automatically scaled up or down based on demand. You'll gain practical experience through hands-on labs and exercises. It covers the following topics:
+  
+  - Deploying applications from source code or container images
+  - Configuring custom domains and SSL certificates
+  - Integrating with other Google Cloud services Get ready to unlock the potential of serverless with Cloud Run!
+
+- [Lab 3 - Cloud Run Service Mesh](../../tree/labs/cloudrun-service-mesh)
+>>>>>>> origin/main
