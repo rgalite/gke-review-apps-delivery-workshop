@@ -1,17 +1,19 @@
-name: Deploy/Review-App
+name: Deploy-Staging
 
 on:
-  pull_request_target:
+  push:
     branches:
       - labs/review-apps
+    tags:
+      - 'staging-*'
 
 jobs:
   call-deploy:
     runs-on: ubuntu-latest
-    environment: qa
+    environment: staging
     uses: ./.github/workflows/deploy.yaml
     with:
-      profile: qa
+      profile: prod
       workload_identity_provider: '${{ vars.WIF_PROVIDER }}'
       service_account: '${{ vars.WIF_SERVICE_ACCOUNT }}'
       domain_name: ${{ vars.DOMAIN_NAME }}

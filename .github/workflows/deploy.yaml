@@ -1,0 +1,99 @@
+on:
+  workflow_call:
+    inputs:
+      profile:
+        type: string
+        required: true
+      workload_identity_provider:
+        type: string
+        required: true
+      service_account:
+        type: string
+        required: true
+      domain_name:
+        type: string
+        required: true
+      cms_service_acct:
+        type: string
+        required: true
+      region:
+        type: string
+        required: true
+      instance_name:
+        type: string
+        required: true
+      project_id:
+        type: string
+        required: true
+      ar_repo:
+        type: string
+        required: true
+      cluster_name:
+        type: string
+        required: true
+      namespace:
+        type: string
+        required: true
+      runs-on:
+        type: string
+        required: true
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: '${{ inputs.workload_identity_provider }}'
+          service_account: '${{ inputs.service_account }}'
+
+      - name: Generate Config
+        run: |
+          ./generate-config.sh cms
+          ./generate-config.sh frontend
+          echo SKAFFOLD_NAMESPACE=$SKAFFOLD_NAMESPACE >> skaffold.env
+          echo SKAFFOLD_DEFAULT_REPO=${{ inputs.ar_repo }} >> skaffold.env
+        env:
+          DOMAIN_NAME: ${{ inputs.domain_name }}
+          CMS_SERVICE_ACCT: ${{ inputs.cms_service_acct }}
+          REGION: ${{ inputs.region }}
+          INSTANCE_NAME: ${{ inputs.instance_name }}
+          PROJECT_ID: ${{ inputs.project_id }}
+          SKAFFOLD_NAMESPACE: ${{ inputs.namespace }}
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v3'
+
+      - name: Docker Auth
+        run: gcloud auth configure-docker ${{ inputs.region }}-docker.pkg.dev
+
+      - Name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v3'
+        with:
+          project_id: ${{ inputs.project_id }}
+          location: ${{ inputs.region }}
+          cluster_name: ${{ inputs.cluster_name }}
+          namespace: ${{ inputs.namespace }}
+
+      - name: Create Namespace
+        run: |
+          kubectl delete ns $NAMESPACE --ignore-not-found=true --wait=false &
+          kubectl wait namespace/$NAMESPACE --for=delete --timeout=-1s
+          kubectl create ns $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+          kubectl annotate ns $NAMESPACE cnrm.cloud.google.com/project-id=$PROJECT_ID --overwrite
+          kubectl label ns $NAMESPACE shared-gateway-access='true' --overwrite
+        env:
+          NAMESPACE: ${{ inputs.namespace }}
+          PROJECT_ID: ${{ inputs.project_id }}
+
+      - name: Setup Skaffold
+        uses: heypigeonhq/setup-skaffold@v1.0.0
+
+      - name: Deploy
+        run: |
+          skaffold run --profile=${{ inputs.profile }}
