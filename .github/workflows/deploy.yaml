@@ -72,7 +72,7 @@ jobs:
       - name: Docker Auth
         run: gcloud auth configure-docker ${{ inputs.region }}-docker.pkg.dev
 
-      - Name: 'Get GKE credentials'
+      - name: 'Get GKE credentials'
         uses: 'google-github-actions/get-gke-credentials@v3'
         with:
           project_id: ${{ inputs.project_id }}
