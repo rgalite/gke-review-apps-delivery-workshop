@@ -1,13 +1,26 @@
-apiVersion: iam.cnrm.cloud.google.com/v1beta1
-kind: IAMPartialPolicy
-metadata:
-  name: workloadidentity-cms-sa
-spec:
-  resourceRef:
-    kind: IAMServiceAccount
-    external: iampolicy-dep-workloadidentity@${PROJECT_ID?}.iam.gserviceaccount.com
-  bindings:
-    - role: roles/iam.workloadIdentityUser
-      members:
-        - member: serviceAccount:${PROJECT_ID?}.svc.id.goog[default/iampolicy-dep-workloadidentity]
+# apiVersion: iam.cnrm.cloud.google.com/v1beta1
+# kind: IAMPartialPolicy
+# metadata:
+#   name: workloadidentity-cms-sa
+# spec:
+#   resourceRef:
+#     kind: IAMServiceAccount
+#     external: iampolicy-dep-workloadidentity@${PROJECT_ID?}.iam.gserviceaccount.com
+#   bindings:
+#     - role: roles/iam.workloadIdentityUser
+#       members:
+#         - member: serviceAccount:${PROJECT_ID?}.svc.id.goog[default/iampolicy-dep-workloadidentity]
 
+# ---
+apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
+kind: ServiceAccountIAMMember
+metadata:
+  name: service-account-iam-member
+spec:
+  forProvider:
+    member: serviceAccount:${PROJECT_ID?}.svc.id.goog[default/iampolicy-dep-workloadidentity]
+    role: roles/iam.workloadIdentityUser
+    serviceAccountId:
+      name: cms
+  providerConfigRef:
+    name: default

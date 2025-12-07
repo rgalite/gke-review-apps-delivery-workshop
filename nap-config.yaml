@@ -1,0 +1,3 @@
+shieldedInstanceConfig:
+  enableSecureBoot: true
+  enableIntegrityMonitoring: true

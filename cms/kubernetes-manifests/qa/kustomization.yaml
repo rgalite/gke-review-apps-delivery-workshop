@@ -13,30 +13,30 @@ replacements:
       fieldPath: data.INSTANCE_NAME
     targets:
       - select:
-          kind: SQLDatabase
+          kind: Database
           name: sqldatabase
         fieldPaths:
-        - spec.instanceRef.external
+        - spec.forProvider.instance
   - source:
       kind: ConfigMap
       name: cms-config
-      fieldPath: data.WORKLOAD_IDENTITY_GCP_SERVICE_ACCOUNT
+      fieldPath: data.GCP_SERVICE_ACCOUNT
     targets:
       - select:
-          kind: IAMPartialPolicy
-          name: workloadidentity-cms-sa
+          kind: ServiceAccountIAMMember
+          name: service-account-iam-member
         fieldPaths:
-        - spec.resourceRef.external
+        - spec.forProvider.serviceAccountId
   - source:
       kind: ConfigMap
       name: cms-config
       fieldPath: data.WORKLOAD_IDENTITY_SERVICE_ACCOUNT
     targets:
       - select:
-          kind: IAMPartialPolicy
-          name: workloadidentity-cms-sa
+          kind: ServiceAccountIAMMember
+          name: service-account-iam-member
         fieldPaths:
-        - spec.bindings.0.members.0.member
+          - spec.forProvider.member
         options:
           delimiter: ':'
           index: 1

@@ -1,0 +1,10 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: workload-identity-runtimeconfig
+spec:
+  serviceAccountTemplate:
+    metadata:
+      annotations:
+        iam.gke.io/gcp-service-account: crossplane@mgalite-deezer-devxp.iam.gserviceaccount.com
+      name: crossplane
