@@ -16,5 +16,5 @@ jobs:
     with:
       profile: prod
       namespace: staging
-      runs-on: ubuntu-latest
+      runs-on: arc-runner-set
       environment: staging
