@@ -7,6 +7,8 @@ export default function RestaurantListItem({
   address,
   rating,
   numberOfReviews,
+  priceLevel,
+  priceRange,
 }) {
   return (
     <div className="p-2 border border-gray-200 rounded">
@@ -15,6 +17,7 @@ export default function RestaurantListItem({
         <ReactStars count={5} value={rating} edit={false} size={16} />
         <div className="ml-2">{numberOfReviews} reviews</div>
       </div>
+      <div className="text-sm text-gray-400">{priceLevel}</div>
       <div>{address}</div>
     </div>
   )

@@ -378,6 +378,8 @@ export interface ApiRestaurantRestaurant extends Schema.CollectionType {
     rating: Attribute.Decimal & Attribute.Required
     description: Attribute.Text
     numberOfReviews: Attribute.Integer & Attribute.Required
+    priceLevel: Attribute.String
+    priceRange: Attribute.String
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     publishedAt: Attribute.DateTime
